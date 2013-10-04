@@ -269,7 +269,7 @@ public class Database {
 	 * @return model
 	 */
 	public Model getModel(){
-		dataset = TDBFactory.createDataset("data/rdfbase");
+		dataset = TDBFactory.createDataset("rdfbase");
 		Model model = dataset.getDefaultModel();
 		return model;
 	}

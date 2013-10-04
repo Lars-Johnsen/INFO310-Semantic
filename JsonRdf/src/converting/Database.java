@@ -25,7 +25,7 @@ public class Database {
 	Dataset dataset ;
 	String hei ="hei";
 	String merer="sds";
-	String lolol ="sadsaa";
+	String lolol ="ssadsad";
 	/**
 	 * Constructor of class Database
 	 * @param model

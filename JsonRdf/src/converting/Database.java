@@ -23,6 +23,7 @@ import com.hp.hpl.jena.vocabulary.VCARD;
 public class Database {
 
 	Dataset dataset ;
+	String hei ="hei";
 
 	/**
 	 * Constructor of class Database
@@ -110,7 +111,7 @@ public class Database {
 		Model model = getModel();
 
 		String queryString = 	
-				//BRUKE * I STEDET FOR Å SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
+				//BRUKE * I STEDET FOR ÔøΩ SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
 				"SELECT ?eventName ?eventID ?artist ?date ?venueName ?venueID ?lat ?long ?city ?country ?street" 
 				+ " ?postalcode ?venueURL ?eventwebsite ?event ?artist ?phonenumber" 
 				+ "	WHERE { "
@@ -182,7 +183,7 @@ public class Database {
 		String queryString = 
 //				"PREFIX dc: "
 				
-				//BRUKE * I STEDET FOR Å SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
+				//BRUKE * I STEDET FOR ÔøΩ SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
 				"SELECT *" 
 				+ "	WHERE { "
 						+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> \"" + place + "\" ; " 
@@ -254,9 +255,9 @@ public class Database {
 				System.out.println(solution.get("country").toString());
 				System.out.println(solution.get("street").toString());
 				System.out.println(solution.get("postalcode").toString());
-				System.out.println(solution.get("venueURL").toString()); //Ser ut til å vera korrekt!
-				System.out.println(solution.get("eventwebsite").toString()); //Ser ut til å vera bandwebsite
-				System.out.println(solution.get("event").toString()); //Ser ut til å vera LAST FM - Event website
+				System.out.println(solution.get("venueURL").toString()); //Ser ut til ≈í vera korrekt!
+				System.out.println(solution.get("eventwebsite").toString()); //Ser ut til ≈í vera bandwebsite
+				System.out.println(solution.get("event").toString()); //Ser ut til ≈í vera LAST FM - Event website
 				System.out.println(solution.get("phonenumber").toString());
 				System.out.println("--------------------");
 						

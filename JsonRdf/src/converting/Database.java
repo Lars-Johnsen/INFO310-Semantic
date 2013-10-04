@@ -31,6 +31,7 @@ public class Database {
 	 */
 	public Database() {
 		String lol ="Hei";
+		String mer="HEHE";
 
 	}
 

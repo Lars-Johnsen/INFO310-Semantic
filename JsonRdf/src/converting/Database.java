@@ -79,6 +79,7 @@ public class Database {
 	 * @return
 	 */
 	public boolean checkDBLocation(String place){
+		String fjern="hei";
 		Model model = getModel();
 		Boolean result;
 		String queryString = 

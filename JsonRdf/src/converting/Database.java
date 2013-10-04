@@ -85,7 +85,8 @@ public class Database {
 		String queryString = 
 				//BRUKE ASK I STEDET FOR SELECT!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!!!!!!!!!!!!!!!!!!!!!
 				"ASK { "
-				+ "?venue <http://www.w3.org/2001/vcard-rdf/3.0#Locality> \"" + place + "\" . " 
+				+ "FILTER (?place =\"" + place + "\" || regex(?place,\"" + place + "\"))."
+				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?place ; " 
 				+ "}" ;
 		System.out.println(queryString);
 

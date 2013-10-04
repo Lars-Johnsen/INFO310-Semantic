@@ -214,12 +214,16 @@ public class Database {
 
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
-
+		double geoLat = 0.0;
+		double geoLong = 0.0;
 		try {
 			ResultSet results = queryexec.execSelect() ;
 
 			while ( results.hasNext() ){
 				QuerySolution solution = results.nextSolution() ;
+				
+				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
+				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
 				
 				//PUTT INN I GEOEVENT!
 				GeoEvent geoEvent = new GeoEvent(solution.get("eventName").toString(), 
@@ -228,8 +232,10 @@ public class Database {
 												 solution.get("date").toString(),
 												 solution.get("venueName").toString(),
 												 solution.get("venueID").toString(),
-												 solution.get("lat"),
-												 solution.get("long"),
+												 lat,
+												 longitude,
+												 
+												 
 												 solution.get("city").toString(),
 												 solution.get("country").toString(),
 												 solution.get("street").toString(),
@@ -237,10 +243,7 @@ public class Database {
 												 solution.get("venueURL").toString(),
 												 solution.get("event").toString(),
 												 solution.get("eventwebsite").toString(),
-												 solution.get("phonenumber").toString());
-												 
-												 solution.get("artist").toString(),
-												
+												 solution.get("phonenumber").toString());												
 
 				System.out.println(solution.get("date").toString());
 				System.out.println(solution.get("venueName").toString());

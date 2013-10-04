@@ -146,7 +146,9 @@ public class Database {
 			ResultSet results = queryexec.execSelect() ;
 
 			while ( results.hasNext() ){
+				System.out.println("HER" + results.getRowNumber());
 				QuerySolution solution = results.nextSolution() ;
+				System.out.println(solution);
 				System.out.println(solution.get("eventName").toString());
 				System.out.println(solution.get("eventID").toString());
 				System.out.println(solution.get("artist").toString());
@@ -167,59 +169,6 @@ public class Database {
 				//				System.out.println(solution.get("bandwebsite").toString());
 				System.out.println("--------------------");
 
-			}
-		} finally { 
-			queryexec.close() ; 
-		}
-		dataset.close();
-	}
-
-	public void getModelInfo2(String place){
-		Model model = getModel();
-
-		String queryString = 
-				//				"PREFIX dc: "
-
-				//BRUKE * I STEDET FOR � SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
-				"SELECT *" 
-				+ "	WHERE { "
-				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> \"" + place + "\" ; " 
-				+ "<http://www.w3.org/2003/01/geo/wgs84_pos/#lat> ?lat ;"
-				+ "<http://www.w3.org/2003/01/geo/wgs84_pos/#long> ?long ;"
-				+ "<http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?city ;"
-				+ "<http://www.w3.org/2001/vcard-rdf/3.0#Country> ?country ;"
-				+ "<http://www.w3.org/2001/vcard-rdf/3.0#Street> ?street ;"
-				+ "<http://www.w3.org/2001/vcard-rdf/3.0#Pcode> ?postalcode ;"
-				+ "<http://www.w3.org/2001/vcard-rdf/3.0#TEL> ?phonenumber ."
-
-						+ "?venue <http://www.w3.org/2002/07/owl#sameAs> ?venueAddress ."
-
-						+ "?event <http://purl.org/dc/elements/1.1/coverage> ?venue ;"
-						+ "<http://www.w3.org/2000/01/rdf-schema#label> ?eventName ;"
-						+ "<http://purl.org/dc/terms/identifier> ?eventID ;"
-						+ "<http://musicontology.com/#term_MusicArtist> ?artist ;"
-						+ "<http://purl.org/dc/terms/date> ?date ;" 
-						+ "<http://purl.org/NET/c4dm/event.owl#place> ?venueURL ;"
-						+ "<http://xmlns.com/foaf/0.1/homepage> ?eventwebsite ;"
-						+ "<http://musicontology.com/#term_MusicArtist> ?artist ."
-
-						+ "?venue <http://www.w3.org/2000/01/rdf-schema#label> ?venueName ;"
-						+ "<http://purl.org/dc/terms/identifier> ?venueID ."
-
-						+ "}" ;
-
-		System.out.println(queryString);
-
-		Query query = QueryFactory.create(queryString) ;
-		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
-		double geoLat = 0.0;
-		double geoLong = 0.0;
-		try {
-			ResultSet results = queryexec.execSelect() ;
-
-			while ( results.hasNext() ){
-				QuerySolution solution = results.nextSolution() ;
-
 				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
 				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
 
@@ -232,8 +181,6 @@ public class Database {
 						solution.get("venueID").toString(),
 						lat,
 						longitude,
-
-
 						solution.get("city").toString(),
 						solution.get("country").toString(),
 						solution.get("street").toString(),
@@ -241,22 +188,9 @@ public class Database {
 						solution.get("venueURL").toString(),
 						solution.get("event").toString(),
 						solution.get("eventwebsite").toString(),
-						solution.get("phonenumber").toString());												
-
-				System.out.println(solution.get("date").toString());
-				System.out.println(solution.get("venueName").toString());
-				System.out.println(solution.get("venueID").toString());
-				System.out.println(solution.get("lat").toString());
-				System.out.println(solution.get("long").toString());
-				System.out.println(solution.get("city").toString());
-				System.out.println(solution.get("country").toString());
-				System.out.println(solution.get("street").toString());
-				System.out.println(solution.get("postalcode").toString());
-				System.out.println(solution.get("venueURL").toString()); //Ser ut til Œ vera korrekt!
-				System.out.println(solution.get("eventwebsite").toString()); //Ser ut til Œ vera bandwebsite
-				System.out.println(solution.get("event").toString()); //Ser ut til Œ vera LAST FM - Event website
-				System.out.println(solution.get("phonenumber").toString());
-				System.out.println("--------------------");
+						solution.get("phonenumber").toString()
+						);
+				System.out.println(geoEvent.toString());
 
 			}
 		} finally { 
@@ -264,6 +198,85 @@ public class Database {
 		}
 		dataset.close();
 	}
+
+	//	public void getModelInfo2(String place){
+	//		Model model = getModel();
+	//
+	//		String queryString = 
+	//				//				"PREFIX dc: "
+	//
+	//				//BRUKE * I STEDET FOR � SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
+	//				"SELECT *" 
+	//				+ "	WHERE { "
+	//				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> \"" + place + "\" . "
+	//
+	//						+ "?venue <http://www.w3.org/2002/07/owl#sameAs> ?venueAddress ."
+	//
+	//						+ "?event <http://purl.org/dc/elements/1.1/coverage> ?venue ."
+	//
+	//						
+	//
+	//						+ "}" ;
+	//
+	//		System.out.println(queryString);
+	//
+	//		Query query = QueryFactory.create(queryString) ;
+	//		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+	//		double geoLat = 0.0;
+	//		double geoLong = 0.0;
+	//		try {
+	//			ResultSet results = queryexec.execSelect() ;
+	//
+	//			while ( results.hasNext() ){
+	//				System.out.println("HER" + results.getRowNumber());
+	//				QuerySolution solution = results.nextSolution() ;
+	//				System.out.println(solution);
+	//
+	//				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
+	//				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
+	//
+	//				//PUTT INN I GEOEVENT!
+	//				GeoEvent geoEvent = new GeoEvent(solution.get("eventName").toString(), 
+	//						solution.get("eventID").toString(),
+	//						solution.get("eventName").toString(),
+	//						solution.get("date").toString(),
+	//						solution.get("venueName").toString(),
+	//						solution.get("venueID").toString(),
+	//						lat,
+	//						longitude,
+	//
+	//
+	//						solution.get("city").toString(),
+	//						solution.get("country").toString(),
+	//						solution.get("street").toString(),
+	//						solution.get("postalcode").toString(),
+	//						solution.get("venueURL").toString(),
+	//						solution.get("event").toString(),
+	//						solution.get("eventwebsite").toString(),
+	//						solution.get("phonenumber").toString()
+	//						);												
+	//
+	//				System.out.println(solution.get("date").toString());
+	//				System.out.println(solution.get("venueName").toString());
+	//				System.out.println(solution.get("venueID").toString());
+	//				System.out.println(solution.get("lat").toString());
+	//				System.out.println(solution.get("long").toString());
+	//				System.out.println(solution.get("city").toString());
+	//				System.out.println(solution.get("country").toString());
+	//				System.out.println(solution.get("street").toString());
+	//				System.out.println(solution.get("postalcode").toString());
+	//				System.out.println(solution.get("venueURL").toString()); //Ser ut til Œ vera korrekt!
+	//				System.out.println(solution.get("eventwebsite").toString()); //Ser ut til Œ vera bandwebsite
+	//				System.out.println(solution.get("event").toString()); //Ser ut til Œ vera LAST FM - Event website
+	//				System.out.println(solution.get("phonenumber").toString());
+	//				System.out.println("--------------------");
+	//
+	//			}
+	//		} finally { 
+	//			queryexec.close() ; 
+	//		}
+	//		dataset.close();
+	//	}
 
 	/**
 	 * Creating model to use in other methods

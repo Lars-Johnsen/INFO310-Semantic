@@ -95,4 +95,7 @@ public class GeoEvent {
 //				+ getVenue() + ", getClass()=" + getClass() + ", hashCode()="
 //				+ hashCode() + ", toString()=" + super.toString() + "]";
 //	}
+	public String toString(){
+		return eventName + " with " + headliner + "@" + getVenue();
+	}
 }

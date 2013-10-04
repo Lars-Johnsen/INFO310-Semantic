@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class View extends JFrame implements MouseListener {
+public class View extends JFrame {
 
 	private JPanel			northPanel = new JPanel();
 	private JPanel			westPanel = new JPanel();
@@ -38,6 +38,7 @@ public class View extends JFrame implements MouseListener {
 	private JButton			goButton = new JButton("Go!");
 	private DefaultListModel results      = new DefaultListModel();
 	private JList            resultList   = new JList(results);
+	private ViewController 			viewController = new ViewController(this);
 
 
 	private String stringForTest = "DETTE ER EN TEST STRENG OG SKAL";
@@ -188,7 +189,8 @@ public class View extends JFrame implements MouseListener {
 		goButton.setBorderPainted(false);
 		goButton.setContentAreaFilled(false);
 		goButton.setOpaque(false);
-		goButton.addMouseListener(this);
+		goButton.addActionListener(viewController);
+		goButton.setActionCommand("Go!");
 
 		getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(northPanel, BorderLayout.NORTH);
@@ -231,35 +233,5 @@ public class View extends JFrame implements MouseListener {
 
 	public void setResultList(JList resultList) {
 		this.resultList = resultList;
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("TROLLOLO");
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

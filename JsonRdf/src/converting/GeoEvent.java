@@ -11,6 +11,7 @@ public class GeoEvent {
 	
 	private String anders = "ANDERS";
 	private String lars = "LARS";
+	private String eskil = "ESKIL";
 	
 	public GeoEvent(String eventName, String eventID, String headliner,
 			String date, String venueName,String venueId, double lat,double longitude,

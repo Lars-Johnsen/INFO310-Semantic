@@ -30,6 +30,7 @@ public class Database {
 	 * @param model
 	 */
 	public Database() {
+		String lol ="Hei";
 
 	}
 

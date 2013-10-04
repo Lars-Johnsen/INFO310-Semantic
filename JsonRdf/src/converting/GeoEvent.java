@@ -9,6 +9,8 @@ public class GeoEvent {
 	private String bandwebsite;
 	private String eventWebsite;
 	
+	private String anders = "ANDERS";
+	
 	public GeoEvent(String eventName, String eventID, String headliner,
 			String date, String venueName,String venueId, double lat,double longitude,
 			String city,String country, String street, String postalCode, String venueURL, 

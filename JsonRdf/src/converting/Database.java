@@ -24,12 +24,15 @@ public class Database {
 
 	Dataset dataset ;
 	String hei ="hei";
+	String merer="sds";
 
 	/**
 	 * Constructor of class Database
 	 * @param model
 	 */
 	public Database() {
+		String lol ="Hei";
+		String mer="HEHE";
 
 	}
 

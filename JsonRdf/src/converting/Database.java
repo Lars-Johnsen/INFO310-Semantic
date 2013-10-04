@@ -24,6 +24,7 @@ public class Database {
 
 	Dataset dataset ;
 	String hei ="hei";
+	String merer="sds";
 
 	/**
 	 * Constructor of class Database

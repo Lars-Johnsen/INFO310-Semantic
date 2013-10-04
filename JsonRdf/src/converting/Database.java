@@ -104,7 +104,7 @@ public class Database {
 	 * @param place
 	 * @return
 	 */
-	public void getModelInfo(String place){
+	public ArrayList<GeoEvent> getModelInfo(String place){
 		Model model = getModel();
 
 		String queryString = 	
@@ -112,7 +112,8 @@ public class Database {
 				"SELECT ?eventName ?eventID ?artist ?date ?venueName ?venueID ?lat ?long ?city ?country ?street" 
 				+ " ?postalcode ?venueURL ?eventwebsite ?event ?artist ?phonenumber" 
 				+ "	WHERE { "
-				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> \"" + place + "\" ; " 
+				+ "FILTER (?place =\"" + place + "\" || regex(?place,\"" + place + "\"))."
+				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?place ; " 
 				+ "<http://www.w3.org/2003/01/geo/wgs84_pos/#lat> ?lat ;"
 				+ "<http://www.w3.org/2003/01/geo/wgs84_pos/#long> ?long ;"
 				+ "<http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?city ;"
@@ -139,6 +140,7 @@ public class Database {
 
 		System.out.println(queryString);
 
+		ArrayList<GeoEvent> liste = new ArrayList<GeoEvent>();
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
 
@@ -146,28 +148,9 @@ public class Database {
 			ResultSet results = queryexec.execSelect() ;
 
 			while ( results.hasNext() ){
-				System.out.println("HER" + results.getRowNumber());
+
 				QuerySolution solution = results.nextSolution() ;
-				System.out.println(solution);
-				System.out.println(solution.get("eventName").toString());
-				System.out.println(solution.get("eventID").toString());
-				System.out.println(solution.get("artist").toString());
-				System.out.println(solution.get("date").toString());
-				System.out.println(solution.get("venueName").toString());
-				System.out.println(solution.get("venueID").toString());
-				System.out.println(solution.get("lat").toString());
-				System.out.println(solution.get("long").toString());
-				System.out.println(solution.get("city").toString());
-				System.out.println(solution.get("country").toString());
-				System.out.println(solution.get("street").toString());
-				System.out.println(solution.get("postalcode").toString());
-				System.out.println(solution.get("venueURL").toString());
-				System.out.println(solution.get("eventwebsite").toString());
-				System.out.println(solution.get("event").toString());
-				System.out.println(solution.get("artist").toString());
-				System.out.println(solution.get("phonenumber").toString());
-				//				System.out.println(solution.get("bandwebsite").toString());
-				System.out.println("--------------------");
+
 
 				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
 				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
@@ -190,13 +173,16 @@ public class Database {
 						solution.get("eventwebsite").toString(),
 						solution.get("phonenumber").toString()
 						);
-				System.out.println(geoEvent.toString());
+				
+				liste.add(geoEvent);
+				
 
 			}
 		} finally { 
 			queryexec.close() ; 
 		}
 		dataset.close();
+		return liste;
 	}
 
 	//	public void getModelInfo2(String place){

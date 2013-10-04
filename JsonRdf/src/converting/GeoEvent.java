@@ -85,14 +85,14 @@ public class GeoEvent {
 		this.venue = venue;
 	}
 
-	@Override
-	public String toString() {
-		return "GeoEvent [eventName=" + eventName + ", eventID=" + eventID
-				+ ", headliner=" + headliner + ", date=" + date + ", venue="
-				+ venue + ", getEventName()=" + getEventName()
-				+ ", getEventID()=" + getEventID() + ", getHeadliner()="
-				+ getHeadliner() + ", getDate()=" + getDate() + ", getVenue()="
-				+ getVenue() + ", getClass()=" + getClass() + ", hashCode()="
-				+ hashCode() + ", toString()=" + super.toString() + "]";
-	}
+
+//	public String toString() {
+//		return "GeoEvent [eventName=" + eventName + ", eventID=" + eventID
+//				+ ", headliner=" + headliner + ", date=" + date + ", venue="
+//				+ venue + ", getEventName()=" + getEventName()
+//				+ ", getEventID()=" + getEventID() + ", getHeadliner()="
+//				+ getHeadliner() + ", getDate()=" + getDate() + ", getVenue()="
+//				+ getVenue() + ", getClass()=" + getClass() + ", hashCode()="
+//				+ hashCode() + ", toString()=" + super.toString() + "]";
+//	}
 }

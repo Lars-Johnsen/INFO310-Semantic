@@ -17,12 +17,12 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-//		View view = new View();
-		Result res = Geo.getAllEvents("Bergen", "1", "64ecb66631fd1570172e9c44108b96d4");
+				View view = new View();
+		Result res = Geo.getAllEvents("London", "1", "64ecb66631fd1570172e9c44108b96d4");
 		Database db = new Database();
-		if(db.checkDBLocation("Bergen")){
-			System.out.println("DETTE BLE FEIL!!!!!!!");
-			db.getModelInfo2("Bergen");
+		if(db.checkDBLocation("London")){
+			System.out.println("Finnes lokalt");
+			
 		} else {
 			GeoEventConverter geoEventConverter = new GeoEventConverter();
 			JsonObject jsonObject = res.getJsonObject();
@@ -31,7 +31,9 @@ public class Main {
 			Model model = rdfCreator.createRDF(geoArray);
 			db.SaveDB(model);
 		}
-		
+		for(GeoEvent geo : db.getModelInfo("London")){
+			System.out.println(geo.getEventName());
+		}
 	}
 
 }

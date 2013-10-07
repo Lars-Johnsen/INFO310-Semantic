@@ -117,6 +117,7 @@ public class View extends JFrame {
 		//Code for creating the Eventname area
 
 		Dimension detailPanelDimension = new Dimension(400, 50);
+		Dimension resultListDimension = new Dimension(400, 300);
 
 		inputText.setPreferredSize(detailPanelDimension);
 
@@ -170,7 +171,8 @@ public class View extends JFrame {
 		inputArea.setPreferredSize(new Dimension(500, 200));
 
 		northPanel.add(imageLabel);
-
+		resultList.setPreferredSize(resultListDimension);
+		
 		westPanel.add(inputArea);
 		westPanel.add(resultList);
 
@@ -189,6 +191,9 @@ public class View extends JFrame {
 		goButton.setBorderPainted(false);
 		goButton.setContentAreaFilled(false);
 		goButton.setOpaque(false);
+		
+		//TODO
+		// IFølge MVC skal denne ligge i controller?
 		goButton.addActionListener(viewController);
 		goButton.setActionCommand("Go!");
 
@@ -201,6 +206,222 @@ public class View extends JFrame {
 		this.setVisible(true);
 		this.pack();
 		this.setBounds(0, 0, 1024, 768);
+	}
+
+	public JPanel getNorthPanel() {
+		return northPanel;
+	}
+
+	public void setNorthPanel(JPanel northPanel) {
+		this.northPanel = northPanel;
+	}
+
+	public JPanel getWestPanel() {
+		return westPanel;
+	}
+
+	public void setWestPanel(JPanel westPanel) {
+		this.westPanel = westPanel;
+	}
+
+	public JPanel getEastPanel() {
+		return eastPanel;
+	}
+
+	public void setEastPanel(JPanel eastPanel) {
+		this.eastPanel = eastPanel;
+	}
+
+	public JButton getGoButton() {
+		return goButton;
+	}
+
+	public void setGoButton(JButton goButton) {
+		this.goButton = goButton;
+	}
+
+	public ViewController getViewController() {
+		return viewController;
+	}
+
+	public void setViewController(ViewController viewController) {
+		this.viewController = viewController;
+	}
+
+	public String getStringForTest() {
+		return stringForTest;
+	}
+
+	public void setStringForTest(String stringForTest) {
+		this.stringForTest = stringForTest;
+	}
+
+	public JLabel getEventNameLabel() {
+		return eventNameLabel;
+	}
+
+	public void setEventNameLabel(JLabel eventNameLabel) {
+		this.eventNameLabel = eventNameLabel;
+	}
+
+	public JLabel getEventNameArea() {
+		return eventNameArea;
+	}
+
+	public void setEventNameArea(JLabel eventNameArea) {
+		this.eventNameArea = eventNameArea;
+	}
+
+	public JPanel getEventNamePanel() {
+		return eventNamePanel;
+	}
+
+	public void setEventNamePanel(JPanel eventNamePanel) {
+		this.eventNamePanel = eventNamePanel;
+	}
+
+	public JLabel getEventIdLabel() {
+		return eventIdLabel;
+	}
+
+	public void setEventIdLabel(JLabel eventIdLabel) {
+		this.eventIdLabel = eventIdLabel;
+	}
+
+	public JLabel getEventIdArea() {
+		return eventIdArea;
+	}
+
+	public void setEventIdArea(JLabel eventIdArea) {
+		this.eventIdArea = eventIdArea;
+	}
+
+	public JPanel getEventIdpanel() {
+		return eventIdpanel;
+	}
+
+	public void setEventIdpanel(JPanel eventIdpanel) {
+		this.eventIdpanel = eventIdpanel;
+	}
+
+	public JLabel getHeadLinerLabel() {
+		return headLinerLabel;
+	}
+
+	public void setHeadLinerLabel(JLabel headLinerLabel) {
+		this.headLinerLabel = headLinerLabel;
+	}
+
+	public JLabel getHeadlinerArea() {
+		return headlinerArea;
+	}
+
+	public void setHeadlinerArea(JLabel headlinerArea) {
+		this.headlinerArea = headlinerArea;
+	}
+
+	public JPanel getHeadlinerpanel() {
+		return headlinerpanel;
+	}
+
+	public void setHeadlinerpanel(JPanel headlinerpanel) {
+		this.headlinerpanel = headlinerpanel;
+	}
+
+	public JLabel getDateLabel() {
+		return dateLabel;
+	}
+
+	public void setDateLabel(JLabel dateLabel) {
+		this.dateLabel = dateLabel;
+	}
+
+	public JLabel getDateArea() {
+		return DateArea;
+	}
+
+	public void setDateArea(JLabel dateArea) {
+		DateArea = dateArea;
+	}
+
+	public JPanel getDatePanel() {
+		return datePanel;
+	}
+
+	public void setDatePanel(JPanel datePanel) {
+		this.datePanel = datePanel;
+	}
+
+	public JLabel getVenueLabel() {
+		return venueLabel;
+	}
+
+	public void setVenueLabel(JLabel venueLabel) {
+		this.venueLabel = venueLabel;
+	}
+
+	public JLabel getVenueArea() {
+		return venueArea;
+	}
+
+	public void setVenueArea(JLabel venueArea) {
+		this.venueArea = venueArea;
+	}
+
+	public JPanel getVenuePanel() {
+		return venuePanel;
+	}
+
+	public void setVenuePanel(JPanel venuePanel) {
+		this.venuePanel = venuePanel;
+	}
+
+	public JLabel getBandWebsiteLabel() {
+		return BandWebsiteLabel;
+	}
+
+	public void setBandWebsiteLabel(JLabel bandWebsiteLabel) {
+		BandWebsiteLabel = bandWebsiteLabel;
+	}
+
+	public JLabel getBandWebsiteArea() {
+		return BandWebsiteArea;
+	}
+
+	public void setBandWebsiteArea(JLabel bandWebsiteArea) {
+		BandWebsiteArea = bandWebsiteArea;
+	}
+
+	public JPanel getBandWebsitePanel() {
+		return BandWebsitePanel;
+	}
+
+	public void setBandWebsitePanel(JPanel bandWebsitePanel) {
+		BandWebsitePanel = bandWebsitePanel;
+	}
+
+	public JLabel getEventWebsiteLabel() {
+		return eventWebsiteLabel;
+	}
+
+	public void setEventWebsiteLabel(JLabel eventWebsiteLabel) {
+		this.eventWebsiteLabel = eventWebsiteLabel;
+	}
+
+	public JLabel getEventWebsiteArea() {
+		return eventWebsiteArea;
+	}
+
+	public void setEventWebsiteArea(JLabel eventWebsiteArea) {
+		this.eventWebsiteArea = eventWebsiteArea;
+	}
+
+	public JPanel getEventWebsitePanel() {
+		return eventWebsitePanel;
+	}
+
+	public void setEventWebsitePanel(JPanel eventWebsitePanel) {
+		this.eventWebsitePanel = eventWebsitePanel;
 	}
 
 	public JPanel getCenterPanel() {

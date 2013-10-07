@@ -34,10 +34,14 @@ public class View extends JFrame {
 	private JPanel			northPanel = new JPanel();
 	private JPanel			westPanel = new JPanel();
 	private JPanel			eastPanel = new JPanel();
+	private JPanel			detailsPanel = new JPanel();
+	private JPanel 			imagePanel = new JPanel();
+	private JPanel			southPanel = new JPanel();
 	private JTextField		inputText = new JTextField();
 	private JButton			goButton = new JButton("Go!");
 	private DefaultListModel results      = new DefaultListModel();
 	private JList            resultList   = new JList(results);
+//	private JLabel 				mapShower = new JLabel();
 	private ViewController 			viewController = new ViewController(this);
 
 
@@ -80,14 +84,23 @@ public class View extends JFrame {
 	}
 
 	private void setupInterFace() {	
-		this.setPreferredSize(new Dimension(1024, 768));
+		this.setPreferredSize(new Dimension(1024, 1224));
 
 		inputText.setPreferredSize(new Dimension(100, 20));
-		resultList.setPreferredSize(new Dimension(100, 100));
-
+		resultList.setPreferredSize(new Dimension(100, 200));
+//		mapShower.setPreferredSize(new Dimension(400, 300));
+//		mapShower.setBorder(BorderFactory.createBevelBorder(DEFAULT_CURSOR));
+		
+//		System.out.println(mapShower.getWidth());
+		
+//		mapShower.setBackground(Color.BLACK);
 		northPanel.removeAll();
 		northPanel.setPreferredSize(new Dimension(1024, 120));
 		northPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+		
+		southPanel.removeAll();
+		southPanel.setPreferredSize(new Dimension(1024, 120));
+		southPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
 
 		eastPanel.removeAll();
 		eastPanel.setPreferredSize(new Dimension(512,384));
@@ -117,7 +130,7 @@ public class View extends JFrame {
 		//Code for creating the Eventname area
 
 		Dimension detailPanelDimension = new Dimension(400, 50);
-		Dimension resultListDimension = new Dimension(400, 300);
+		Dimension resultListDimension = new Dimension(400, 200);
 
 		inputText.setPreferredSize(detailPanelDimension);
 
@@ -176,17 +189,18 @@ public class View extends JFrame {
 		westPanel.add(inputArea);
 		westPanel.add(resultList);
 
-		eastPanel.add(eventNamePanel);
-		eastPanel.add(eventIdpanel);
-		eastPanel.add(headlinerpanel);
-		eastPanel.add(datePanel);
-		eastPanel.add(venuePanel);
-		eastPanel.add(BandWebsitePanel);
-		eastPanel.add(eventWebsitePanel);
+		detailsPanel.add(eventNamePanel);
+		detailsPanel.add(eventIdpanel);
+		detailsPanel.add(headlinerpanel);
+		detailsPanel.add(datePanel);
+		detailsPanel.add(venuePanel);
+		detailsPanel.add(BandWebsitePanel);
+		detailsPanel.add(eventWebsitePanel);
 
-
-		eastPanel.setVisible(false	);
 		
+		detailsPanel.setVisible(false);
+		eastPanel.add(detailsPanel);
+		eastPanel.add(imagePanel);
 		
 		goButton.setBorderPainted(false);
 		goButton.setContentAreaFilled(false);
@@ -201,12 +215,38 @@ public class View extends JFrame {
 		this.getContentPane().add(northPanel, BorderLayout.NORTH);
 		this.getContentPane().add(westPanel, BorderLayout.WEST);
 		this.getContentPane().add(eastPanel, BorderLayout.EAST);
+		this.getContentPane().add(southPanel, BorderLayout.SOUTH);
 
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.pack();
 		this.setBounds(0, 0, 1024, 768);
 	}
+
+	public JPanel getDetailsPanel() {
+		return detailsPanel;
+	}
+
+	public void setDetailsPanel(JPanel detailsPanel) {
+		this.detailsPanel = detailsPanel;
+	}
+
+	public JPanel getImagePanel() {
+		return imagePanel;
+	}
+
+	public void setImagePanel(JPanel imagePanel) {
+		this.imagePanel = imagePanel;
+	}
+
+	public JPanel getSouthPanel() {
+		return southPanel;
+	}
+
+	public void setSouthPanel(JPanel southPanel) {
+		this.southPanel = southPanel;
+	}
+
 
 	public JPanel getNorthPanel() {
 		return northPanel;

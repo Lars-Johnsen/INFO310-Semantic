@@ -185,4 +185,16 @@ public final class StringUtilities {
 			return "0";
 		}
 	}
+	public static String searchCheck(String searchterm){
+		
+		String termLowerCase = searchterm.toLowerCase();
+		
+		Character forbokstav = Character.toUpperCase(termLowerCase.charAt(0));
+		String resten = termLowerCase.substring(1, termLowerCase.length());
+		String term = forbokstav + resten;
+
+
+		System.out.println(term);
+		return term;
+	}
 }

@@ -147,6 +147,7 @@ public class Database {
 
 		try {
 			ResultSet results = queryexec.execSelect() ;
+			System.out.println(results.hasNext());
 
 			while ( results.hasNext() ){
 

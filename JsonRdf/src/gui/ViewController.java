@@ -18,6 +18,7 @@ import javax.swing.JList;
 
 import lastfmapi.lastfm.Geo;
 import lastfmapi.lastfm.Result;
+import lastfmapi.util.StringUtilities;
 
 import com.google.gson.JsonObject;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -39,29 +40,30 @@ public class ViewController implements ActionListener, MouseListener{
 	}
 
 	public void updateResultList(ArrayList<GeoEvent> result){
-		
+
 		//IMAGE
-		MapDisplayer mapDisplayer= new MapDisplayer(); 
-		RenderedImage img = mapDisplayer.generateMap(result);
-		
-	
+		//		MapDisplayer mapDisplayer= new MapDisplayer(); 
+		//		RenderedImage img = mapDisplayer.generateMap(result);
+
+
 		//IMAGE
 		for(GeoEvent geo : result){
-//			System.out.println(geo.getEventName());
+
+			//			System.out.println(geo.getEventName());
 			view.getResults().addElement(geo);
 		}
-		BufferedImage myPicture = null;
-		try {
-			myPicture = ImageIO.read(new File("img/map.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		JLabel imageLabel = new JLabel(new ImageIcon(myPicture));
-		
-//		view.setMapShower(imageLabel);
-	
-		view.getImagePanel().add(imageLabel);
+		//		BufferedImage myPicture = null;
+		//		try {
+		//			myPicture = ImageIO.read(new File("img/map.png"));
+		//		} catch (IOException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+		//		JLabel imageLabel = new JLabel(new ImageIcon(myPicture));
+
+		//		view.setMapShower(imageLabel);
+
+		//		view.getImagePanel().add(imageLabel);
 		view.repaint();	
 		view.validate();
 	}
@@ -72,6 +74,8 @@ public class ViewController implements ActionListener, MouseListener{
 			System.out.println("TOM-STRENG");
 		}
 		else{
+			term = StringUtilities.searchCheck(term);
+			view.getInputText().setText(term);
 			Result res = Geo.getAllEvents(term, "1", "64ecb66631fd1570172e9c44108b96d4");
 			Database db = new Database();
 			if(db.checkDBLocation(term)){
@@ -84,10 +88,13 @@ public class ViewController implements ActionListener, MouseListener{
 				RdfCreator rdfCreator = new RdfCreator();
 				Model model = rdfCreator.createRDF(geoArray);
 				db.SaveDB(model);
-				
+
 			}
 
 			updateResultList(db.getModelInfo(term));
+			System.out.println(db.getModelInfo(term).size());
+			view.repaint();
+			view.validate();
 		}
 	}
 	/**
@@ -95,7 +102,7 @@ public class ViewController implements ActionListener, MouseListener{
 	 * @param geo the clicked event from the resultList
 	 */
 	public void placeGeoElementOnScreen(GeoEvent geo){
-		
+
 		view.getEventNameArea().setText(geo.getEventName());
 		view.getEventIdArea().setText(geo.getEventID());
 		view.getHeadlinerArea().setText(geo.getHeadliner());

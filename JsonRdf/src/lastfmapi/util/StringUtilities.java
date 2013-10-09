@@ -185,6 +185,11 @@ public final class StringUtilities {
 			return "0";
 		}
 	}
+	/**
+	 * Set
+	 * @param searchterm
+	 * @return
+	 */
 	public static String searchCheck(String searchterm){
 		
 		String termLowerCase = searchterm.toLowerCase();

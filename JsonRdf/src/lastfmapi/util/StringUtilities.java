@@ -187,7 +187,7 @@ public final class StringUtilities {
 	}
 	/**
 	 * Set
-	 * @param searchterm
+	 * @param searchterm  fdg
 	 * @return
 	 */
 	public static String searchCheck(String searchterm){

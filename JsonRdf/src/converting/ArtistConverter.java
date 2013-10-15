@@ -16,17 +16,10 @@ public class ArtistConverter {
 	 */
 
 	
-	public Artist convertArtist(){
-		JsonParser parser = new JsonParser();
-		Object obj = null;
-		try {
-			obj = parser.parse(new FileReader("artistJson.txt"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public Artist convertArtist(JsonObject artistObj){
+		
 
-		JsonObject artistObj = (JsonObject) obj;
+
 		JsonObject artist = artistObj.get("artist").getAsJsonObject();
 
 

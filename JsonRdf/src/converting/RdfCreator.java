@@ -2,12 +2,12 @@ package converting;
 
 import java.util.ArrayList;
 
+import com.google.gson.JsonObject;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sparql.vocabulary.FOAF;
-
 import com.hp.hpl.jena.vocabulary.DC;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 import com.hp.hpl.jena.vocabulary.OWL;
@@ -38,36 +38,35 @@ public class RdfCreator {
 		for(GeoEvent geoEvent : geoArray){
 			String venueURL = geoEvent.getVenue().getUrl();
 			
-			//TODO
-			/**
-			 * Start rendring
-			 * Her må vi ha kall til databasen med
-			 * @param String artistnavn.
-			 */
-			
-			ArtistConverter artistConverter = new ArtistConverter();
-			Artist artist = artistConverter.convertArtist();
-			
-			
-			/**
-			 * Slutt av endring
-			 */
 			
 			//Resource event and adding it's properties
 			
 			Resource event = model.createResource(geoEvent.getEventUrl());
 			event.addProperty(RDFS.label, model.createLiteral(geoEvent.getEventName()));
 			
-			event.addProperty(RDF.type, model.createProperty("http://musicontology.com/#term_Performance"))
-			.addProperty(DCTerms.identifier, geoEvent.getEventID())
+//			event.addProperty(RDF.type, model.createProperty("http://musicontology.com/#term_Performance"))
+			event.addProperty(DCTerms.identifier, geoEvent.getEventID())
 			.addProperty(DCTerms.date, geoEvent.getDate())
-			.addProperty(model.createProperty("http://musicontology.com/#term_MusicArtist"), geoEvent.getHeadliner())
+			
 			.addProperty(model.createProperty("http://purl.org/NET/c4dm/event.owl#place"), geoEvent.getVenue().getUrl());
 			
 			/**
 			 * Adding av artist
 			 */
 			//TODO
+			
+			
+		
+			
+			lastfmapi.lastfm.Artist lastFmArtist = new lastfmapi.lastfm.Artist();
+			JsonObject jsonArtist = lastFmArtist.getInfo(geoEvent.getHeadliner(), "64ecb66631fd1570172e9c44108b96d4").getJsonObject();
+			
+			
+			ArtistConverter artistConverter = new ArtistConverter();
+			Artist artist = artistConverter.convertArtist(jsonArtist);
+			
+			
+
 			
 			Resource artistResource = model.createResource(artist.getArtistURL());
 			artistResource.addProperty(RDFS.label, artist.getName())
@@ -83,11 +82,10 @@ public class RdfCreator {
 			if(!geoEvent.getEventWebsite().isEmpty()){
 				event.addProperty(FOAF.homepage, geoEvent.getEventWebsite());
 			}
-			System.out.println(event.getProperty(model.getProperty("http://musicontology.com/#term_MusicArtist")).getObject().toString());
+
 			
-			artistResource.addProperty(OWL.sameAs, event.getProperty(model.getProperty("http://musicontology.com/#term_MusicArtist")).getObject().toString());
-			
-			
+			event.addProperty(model.createProperty("http://musicontology.com/#term_MusicArtist"), artistResource);
+
 			/**
 			 * Slutt på adding av artist
 			 */

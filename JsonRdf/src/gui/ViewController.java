@@ -92,7 +92,6 @@ public class ViewController implements ActionListener, MouseListener{
 			}
 
 			updateResultList(db.getModelInfo(term));
-			System.out.println(db.getModelInfo(term).size());
 			view.repaint();
 			view.validate();
 		}

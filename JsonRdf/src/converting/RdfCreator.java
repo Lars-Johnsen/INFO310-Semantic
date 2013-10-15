@@ -38,6 +38,21 @@ public class RdfCreator {
 		for(GeoEvent geoEvent : geoArray){
 			String venueURL = geoEvent.getVenue().getUrl();
 			
+			//TODO
+			/**
+			 * Start rendring
+			 * Her må vi ha kall til databasen med
+			 * @param String artistnavn.
+			 */
+			
+			ArtistConverter artistConverter = new ArtistConverter();
+			Artist artist = artistConverter.convertArtist();
+			
+			
+			/**
+			 * Slutt av endring
+			 */
+			
 			//Resource event and adding it's properties
 			
 			Resource event = model.createResource(geoEvent.getEventUrl());
@@ -49,9 +64,33 @@ public class RdfCreator {
 			.addProperty(model.createProperty("http://musicontology.com/#term_MusicArtist"), geoEvent.getHeadliner())
 			.addProperty(model.createProperty("http://purl.org/NET/c4dm/event.owl#place"), geoEvent.getVenue().getUrl());
 			
+			/**
+			 * Adding av artist
+			 */
+			//TODO
+			
+			Resource artistResource = model.createResource(artist.getArtistURL());
+			artistResource.addProperty(RDFS.label, artist.getName())
+			.addProperty(DCTerms.identifier, artist.getMbid());
+			
+			for(String s : artist.getSimilarArtists()){
+				artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/similar_to"),s);
+			}
+			for (String t : artist.getTags()){
+				artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/Genre"), t);
+			}
+			
 			if(!geoEvent.getEventWebsite().isEmpty()){
 				event.addProperty(FOAF.homepage, geoEvent.getEventWebsite());
 			}
+			System.out.println(event.getProperty(model.getProperty("http://musicontology.com/#term_MusicArtist")).getObject().toString());
+			
+			artistResource.addProperty(OWL.sameAs, event.getProperty(model.getProperty("http://musicontology.com/#term_MusicArtist")).getObject().toString());
+			
+			
+			/**
+			 * Slutt på adding av artist
+			 */
 			
 			//Resource venue and adding it's properties
 			Resource venue = model.createResource(venueURL);
@@ -72,7 +111,13 @@ public class RdfCreator {
 			event.addProperty(DC.coverage, venue);
 	
 		}
-//		model.write(System.out);
+		model.write(System.out);
 		return model;
 	}	
+
+	
+		
+		
+		
+	
 }

@@ -39,7 +39,7 @@ public class Database {
 	public void SaveDB(Model model){
 		Model dbModel = getModel();
 		dbModel.add(model);
-		dbModel.write(System.out);
+//		dbModel.write(System.out);
 
 		dataset.close();
 	}
@@ -87,6 +87,27 @@ public class Database {
 				"ASK { "
 				+ "FILTER (?place =\"" + place + "\" || regex(?place,\"" + place + "\"))."
 				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?place ; " 
+				+ "}" ;
+		System.out.println(queryString);
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			result = queryexec.execAsk() ;
+		} finally { queryexec.close() ; }
+		dataset.close();
+		return result;
+	}
+	public boolean checkDBArtist(String artist){
+				
+		Model model = getModel();
+		Boolean result;
+		String queryString = 
+				//BRUKE ASK I STEDET FOR SELECT!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!!!!!!!!!!!!!!!!!!!!!
+				"ASK { "
+				+ "FILTER (?artist =\"" + artist + "\" || regex(?artist,\"" + artist + "\"))."
+				+ "?artistName <http://musicontology.com/#term_MusicArtist> ?artist ; " 
 				+ "}" ;
 		System.out.println(queryString);
 

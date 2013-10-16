@@ -12,29 +12,26 @@ public class ArtistConverter {
 	/**
 	 * Class for converting artistInfo from JSON format to, java objects.
 	 * @author Lars Johnsen
-	 * @return 
+	 * @return Artist return a java object of the artist.
 	 */
 
 
 	public Artist convertArtist(JsonObject artistObj){
 
-
-
 		JsonObject artist = artistObj.get("artist").getAsJsonObject();
 		ArrayList<String> similarArtistsURL = new ArrayList<String>();
 		ArrayList<String> tagsArray = new ArrayList<String>();
 
-
-
-
 		String name = artist.get("name").getAsString();
 		String mbID = artist.get("mbid").getAsString();
 		String artistURL = artist.get("url").getAsString();
+		
 		//Similar comes in an array of JsonObjects as URLS to lastfm.
-
 		if(artist.get("similar").isJsonObject()){
 			JsonObject similarObject = artist.get("similar").getAsJsonObject();
 
+			
+			//If similarobject is an Array loop trough and collect all instances.
 			if(similarObject.get("artist").isJsonArray()){
 				JsonArray similarArtistArray = (JsonArray) similarObject.get("artist");
 

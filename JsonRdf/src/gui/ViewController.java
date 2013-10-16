@@ -76,22 +76,24 @@ public class ViewController implements ActionListener, MouseListener{
 		else{
 			term = StringUtilities.searchCheck(term);
 			view.getInputText().setText(term);
-			Result res = Geo.getAllEvents(term, "1", "64ecb66631fd1570172e9c44108b96d4");
+			Result res = Geo.getAllEvents(term, "0", "64ecb66631fd1570172e9c44108b96d4");
 			Database db = Database.getInstance();
 			if(db.checkDBLocation(term)){
 				System.out.println("Finnes lokalt");
 
 			} else {
+				System.out.println("TERRRRM" + " " + term);
 				GeoEventConverter geoEventConverter = new GeoEventConverter();
 				JsonObject jsonObject = res.getJsonObject();
 				ArrayList<GeoEvent> geoArray = geoEventConverter.eventDataGenerator(jsonObject);
 				RdfCreator rdfCreator = new RdfCreator();
-				Model model = rdfCreator.createRDF(geoArray);
-				db.SaveDB(model);
+				rdfCreator.createRDF(geoArray);
+				
 
 			}
 
 			updateResultList(db.getModelInfo(term));
+			db.sysoDB();
 			view.repaint();
 			view.validate();
 		}
@@ -128,7 +130,7 @@ public class ViewController implements ActionListener, MouseListener{
 	public void attend (String Eventuri){
 		Database db = Database.getInstance();
 		db.attend(Eventuri);
-		
+
 	}
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub

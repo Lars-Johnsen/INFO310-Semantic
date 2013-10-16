@@ -19,87 +19,84 @@ public class RdfCreator {
 
 	static String musicURI    = "http://purl.org/ontology/mo/";
 	static String terms = "http://purl.org/dc/terms/";
-	
-	
+
+
 	public RdfCreator() {
-	
+
 	}
-	
+
 	/**
 	 * Generating model from ArrayList
 	 * @param geoArray
 	 * @return model
 	 */
 	public Model createRDF(ArrayList<GeoEvent> geoArray){
-		
+
 		Database db = Database.getInstance();
 		Model model = db.getModel();
-		
+
 		for(GeoEvent geoEvent : geoArray){
 			String venueURL = geoEvent.getVenue().getUrl();
-			
-			
+
+
 			//Resource event and adding it's properties
-			
+
 			Resource event = model.createResource(geoEvent.getEventUrl());
 			event.addProperty(RDFS.label, model.createLiteral(geoEvent.getEventName()));
-			
-//			event.addProperty(RDF.type, model.createProperty("http://musicontology.com/#term_Performance"))
+
+			//			event.addProperty(RDF.type, model.createProperty("http://musicontology.com/#term_Performance"))
 			event.addProperty(DCTerms.identifier, geoEvent.getEventID())
 			.addProperty(DCTerms.date, geoEvent.getDate())
-			
+
 			.addProperty(model.createProperty("http://purl.org/NET/c4dm/event.owl#place"), geoEvent.getVenue().getUrl());
-			
+
 			/**
 			 * Adding av artist
 			 */
-			//TODO
 			
-			
-		
-			
-			lastfmapi.lastfm.Artist lastFmArtist = new lastfmapi.lastfm.Artist();
-			JsonObject jsonArtist = lastFmArtist.getInfo(geoEvent.getHeadliner(), "64ecb66631fd1570172e9c44108b96d4").getJsonObject();
-			
-			
-			ArtistConverter artistConverter = new ArtistConverter();
-			Artist artist = artistConverter.convertArtist(jsonArtist);
-			
-//			if(db.checkDBArtist(artist.getMbid()) == true){
-//				model.getRe
-//				
-//			}
 
-			
-			Resource artistResource = model.createResource(artist.getArtistURL());
-			artistResource.addProperty(RDFS.label, artist.getName())
-			.addProperty(DCTerms.identifier, artist.getMbid())
-			.addProperty(RDF.type, "music:artist");
-			
-			for(String s : artist.getSimilarArtists()){
-				artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/similar_to"),s);
+			String artistRessurs = db.checkDBArtist(geoEvent.getHeadliner());
+
+			if(artistRessurs.equals("")){
+
+				lastfmapi.lastfm.Artist lastFmArtist = new lastfmapi.lastfm.Artist();
+				JsonObject jsonArtist = lastFmArtist.getInfo(geoEvent.getHeadliner(), "64ecb66631fd1570172e9c44108b96d4").getJsonObject();
+
+				ArtistConverter artistConverter = new ArtistConverter();
+				Artist artist = artistConverter.convertArtist(jsonArtist);
+
+				Resource artistResource = model.createResource(artist.getArtistURL());
+				artistResource.addProperty(RDFS.label, artist.getName())
+				.addProperty(DCTerms.identifier, artist.getMbid())
+				.addProperty(RDF.type, "http://purl.org/ontology/mo/MusicArtist");
+
+				for(String s : artist.getSimilarArtists()){
+					artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/similar_to"),s);
+				}
+				for (String t : artist.getTags()){
+					artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/Genre"), t);
+				}
+
+
+				event.addProperty(model.createProperty("http://purl.org/ontology/mo/performer"), artistResource);
 			}
-			for (String t : artist.getTags()){
-				artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/Genre"), t);
+			else{
+				System.out.println("N電電電電電電電電電電電電電電");
+				event.addProperty(model.createProperty("http://purl.org/ontology/mo/performer"), model.getResource(artistRessurs));	
 			}
-			
 			if(!geoEvent.getEventWebsite().isEmpty()){
 				event.addProperty(FOAF.homepage, geoEvent.getEventWebsite());
 			}
-
-			
-			event.addProperty(model.createProperty("http://musicontology.com/#term_MusicArtist"), artistResource);
-
 			/**
 			 * Slutt p奪 adding av artist
 			 */
-			
+
 			//Resource venue and adding it's properties
 			Resource venue = model.createResource(venueURL);
 			venue.addProperty(RDFS.label, geoEvent.getVenue().getName())
 			.addProperty(RDF.type, "music:Venue");
 			venue.addProperty(DCTerms.identifier, geoEvent.getVenue().getVenueID());
-			
+
 			Resource venueAddress = model.createResource(venueURL+"#address");
 			venueAddress.addProperty(VCARD.Country, geoEvent.getVenue().getCountry());
 			venueAddress.addProperty(VCARD.Locality, geoEvent.getVenue().getCity());
@@ -108,18 +105,18 @@ public class RdfCreator {
 			venueAddress.addProperty(VCARD.TEL, geoEvent.getVenue().getPhoneNumber());
 			venueAddress.addProperty(model.createProperty("http://www.w3.org/2003/01/geo/wgs84_pos/#lat"), String.valueOf(geoEvent.getVenue().getLatitude()));
 			venueAddress.addProperty(model.createProperty("http://www.w3.org/2003/01/geo/wgs84_pos/#long"), String.valueOf(geoEvent.getVenue().getLongitude()));
-			
+
 			venue.addProperty(OWL.sameAs, venueAddress);		
 			event.addProperty(DC.coverage, venue);
-	
+
 		}
-		model.write(System.out);
+		//		model.write(System.out);
 		return model;
 	}	
 
-	
-		
-		
-		
-	
+
+
+
+
+
 }

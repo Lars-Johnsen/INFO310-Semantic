@@ -112,25 +112,32 @@ public class Database {
 		dataset.close();
 		return result;
 	}
-	public boolean checkDBArtist(String artist){
+	public String checkDBArtist(String artistnavn){
 
 		Model model = getModel();
-		Boolean result;
+		String result ="";
 		String queryString = 
-				//BRUKE ASK I STEDET FOR SELECT!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!!!!!!!!!!!!!!!!!!!!!
-				"ASK { "
-				+ "FILTER (?artist =\"" + artist + "\" || regex(?artist,\"" + artist + "\"))."
-				+ "?artistName <http://musicontology.com/#term_MusicArtist> ?artist ; " 
-				+ "}" ;
+						"SELECT ?ArtistURI" 
+						+ "	WHERE { "
+						+ "?ArtistURI <http://www.w3.org/2000/01/rdf-schema#label> \"" + artistnavn + "\" ; "
+						+ "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 'http://purl.org/ontology/mo/MusicArtist' ."
+						+ "}" ;
 		System.out.println(queryString);
 
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
 
 		try {
-			result = queryexec.execAsk() ;
-		} finally { queryexec.close() ; }
-		dataset.close();
+			ResultSet results = queryexec.execSelect() ;
+			System.out.println(results.hasNext());
+			while ( results.hasNext() ){
+
+				QuerySolution solution = results.nextSolution() ;
+				result = solution.getResource("ArtistURI").getURI();
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
 		return result;
 	}
 
@@ -162,11 +169,10 @@ public class Database {
 						+ "?event <http://purl.org/dc/elements/1.1/coverage> ?venue ;"
 						+ "<http://www.w3.org/2000/01/rdf-schema#label> ?eventName ;"
 						+ "<http://purl.org/dc/terms/identifier> ?eventID ;"
-						+ "<http://musicontology.com/#term_MusicArtist> ?artist ;"
 						+ "<http://purl.org/dc/terms/date> ?date ;" 
 						+ "<http://purl.org/NET/c4dm/event.owl#place> ?venueURL ;"
 						+ "<http://xmlns.com/foaf/0.1/homepage> ?eventwebsite ;"
-						+ "<http://musicontology.com/#term_MusicArtist> ?artist ."
+						+ "<http://purl.org/ontology/mo/performer> ?artist ."
 
 						+ "?venue <http://www.w3.org/2000/01/rdf-schema#label> ?venueName ;"
 						+ "<http://purl.org/dc/terms/identifier> ?venueID ."
@@ -318,14 +324,17 @@ public class Database {
 						+  eventResource +  ". " 
 						+ "}" ;
 
-		
+
 		UpdateRequest query = UpdateFactory.create(queryString) ;
 		UpdateAction.execute(query, model);
 		System.out.println("OMG");
-		model.write(System.out);
+//		model.write(System.out);
 		System.out.println(queryString);
 		System.out.println(eventResource);
 		System.out.println(eventURI);
 		dataset.close();
+	}
+	public void sysoDB(){
+		getModel().write(System.out);
 	}
 }

@@ -88,14 +88,13 @@ public class Geo {
 	 * @return a {@link PaginatedResult} containing a list of events
 	 */
 	public static Result getEvents(String location, String distance, int page, String apiKey) {
-		return getEvents(location, distance, page, 300, apiKey);
+		return getEvents(location, distance, page, 20, apiKey);
 	}
 
 	public static Result getEvents(String location, String distance, int page, int limit, String apiKey) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("page", String.valueOf(page));
 		MapUtilities.nullSafePut(params, "location", location);
-		MapUtilities.nullSafePut(params, "distance", distance);
 		MapUtilities.nullSafePut(params, "limit", limit);
 		MapUtilities.nullSafePut(params, "format", "json");
 		Result result = Caller.getInstance().call("geo.getEvents", apiKey, params);
@@ -145,7 +144,7 @@ public class Geo {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("lat", String.valueOf(latitude));
 		params.put("long", String.valueOf(longitude));
-		params.put("distance", distance);
+
 		MapUtilities.nullSafePut(params, "page", page);
 		MapUtilities.nullSafePut(params, "limit", limit);
 		Result result = Caller.getInstance().call("geo.getEvents", apiKey, params);

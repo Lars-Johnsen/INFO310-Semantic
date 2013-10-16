@@ -17,24 +17,25 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.update.Update;
+import com.hp.hpl.jena.update.UpdateAction;
+import com.hp.hpl.jena.update.UpdateExecutionFactory;
+import com.hp.hpl.jena.update.UpdateFactory;
+import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.VCARD;
 
 public class Database {
 
 	Dataset dataset ;
-	String hei ="hei";
-	String merer="sds";
-	String lolol ="ssadsad";
 	public static Database database;
 	/**
 	 * Constructor of class Database
 	 * @param model
 	 */
 	private Database() {
-		String lol ="Hei";
-		String mer="HEHE";
-
+		Resource bruker = getModel().createResource("http://www.user.no/anderslangseth");
+		bruker.addProperty(VCARD.NAME, "Anders Langseth");
 	}
 	/**
 	 * getInstance method to make sure we only work with one instance of the class
@@ -51,7 +52,7 @@ public class Database {
 	public void SaveDB(Model model){
 		Model dbModel = getModel();
 		dbModel.add(model);
-//		dbModel.write(System.out);
+		//		dbModel.write(System.out);
 
 		dataset.close();
 	}
@@ -112,7 +113,7 @@ public class Database {
 		return result;
 	}
 	public boolean checkDBArtist(String artist){
-				
+
 		Model model = getModel();
 		Boolean result;
 		String queryString = 
@@ -208,9 +209,9 @@ public class Database {
 						solution.get("eventwebsite").toString(),
 						solution.get("phonenumber").toString()
 						);
-				
+
 				liste.add(geoEvent);
-				
+
 
 			}
 		} finally { 
@@ -307,5 +308,24 @@ public class Database {
 		dataset = TDBFactory.createDataset("rdfbase");
 		Model model = dataset.getDefaultModel();
 		return model;
+	}
+	public void attend(String eventURI){
+		Model model = getModel();
+		String eventResource = "<" + eventURI +">";
+		String queryString = 
+				"INSERT DATA { "
+						+ "<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend>"
+						+  eventResource +  ". " 
+						+ "}" ;
+
+		
+		UpdateRequest query = UpdateFactory.create(queryString) ;
+		UpdateAction.execute(query, model);
+		System.out.println("OMG");
+		model.write(System.out);
+		System.out.println(queryString);
+		System.out.println(eventResource);
+		System.out.println(eventURI);
+		dataset.close();
 	}
 }

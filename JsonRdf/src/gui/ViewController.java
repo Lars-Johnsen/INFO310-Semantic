@@ -118,9 +118,18 @@ public class ViewController implements ActionListener, MouseListener{
 			view.getResults().clear();
 			search(view.getInputText().getText());
 		}
+		else if(e.getActionCommand().equals("attend")){
+			GeoEvent event = (GeoEvent)view.getResultList().getSelectedValue();
+			attend(event.getEventUrl());
+
+		}
 	}
 
-	@Override
+	public void attend (String Eventuri){
+		Database db = Database.getInstance();
+		db.attend(Eventuri);
+		
+	}
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 

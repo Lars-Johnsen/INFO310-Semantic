@@ -25,12 +25,12 @@ public class ArtistConverter {
 		String name = artist.get("name").getAsString();
 		String mbID = artist.get("mbid").getAsString();
 		String artistURL = artist.get("url").getAsString();
-		
+
 		//Similar comes in an array of JsonObjects as URLS to lastfm.
 		if(artist.get("similar").isJsonObject()){
 			JsonObject similarObject = artist.get("similar").getAsJsonObject();
 
-			
+
 			//If similarobject is an Array loop trough and collect all instances.
 			if(similarObject.get("artist").isJsonArray()){
 				JsonArray similarArtistArray = (JsonArray) similarObject.get("artist");
@@ -44,12 +44,14 @@ public class ArtistConverter {
 		}
 		if(artist.get("tags").isJsonObject()){
 			JsonObject tagsObject = artist.get("tags").getAsJsonObject();
-			JsonArray tagsJsonArray = (JsonArray) tagsObject.get("tag");
-			for(JsonElement tagsInArtist : tagsJsonArray){
-				JsonObject tag = (JsonObject) tagsInArtist;
+			if(tagsObject.isJsonArray()){
+				JsonArray tagsJsonArray = (JsonArray) tagsObject.get("tag");
+				for(JsonElement tagsInArtist : tagsJsonArray){
+					JsonObject tag = (JsonObject) tagsInArtist;
 
 
-				tagsArray.add(tag.get("url").getAsString());
+					tagsArray.add(tag.get("url").getAsString());
+				}
 			}
 		}
 

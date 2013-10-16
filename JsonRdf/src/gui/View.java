@@ -43,7 +43,7 @@ public class View extends JFrame {
 	private JList            resultList   = new JList(results);
 //	private JLabel 				mapShower = new JLabel();
 	private ViewController 			viewController = new ViewController(this);
-
+	private JButton					attend = new JButton("attend");
 
 	private String stringForTest = "DETTE ER EN TEST STRENG OG SKAL";
 	/**
@@ -181,6 +181,7 @@ public class View extends JFrame {
 		inputArea.add(inputTextLabel);
 		inputArea.add(inputText);
 		inputArea.add(goButton);
+		inputArea.add(attend);
 		inputArea.setPreferredSize(new Dimension(500, 200));
 
 		northPanel.add(imageLabel);
@@ -210,6 +211,9 @@ public class View extends JFrame {
 		// IFølge MVC skal denne ligge i controller?
 		goButton.addActionListener(viewController);
 		goButton.setActionCommand("Go!");
+		attend.addActionListener(viewController);
+		attend.setActionCommand("attend");
+		
 
 		getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(northPanel, BorderLayout.NORTH);

@@ -21,10 +21,6 @@ public class ArtistConverter {
 
 
 		JsonObject artist = artistObj.get("artist").getAsJsonObject();
-
-
-
-
 		ArrayList<String> similarArtistsURL = new ArrayList<String>();
 		ArrayList<String> tagsArray = new ArrayList<String>();
 
@@ -36,6 +32,7 @@ public class ArtistConverter {
 		String artistURL = artist.get("url").getAsString();
 		//Similar comes in an array of JsonObjects as URLS to lastfm.
 		
+		if(artist.get("similar").isJsonObject()){
 		JsonObject similarObject = artist.get("similar").getAsJsonObject();
 		
 			JsonArray similarArtistArray = (JsonArray) similarObject.get("artist");
@@ -45,7 +42,7 @@ public class ArtistConverter {
 				
 				similarArtistsURL.add(similarArtistObject.get("url").getAsString());
 			}	
-			
+		}
 			JsonObject tagsObject = artist.get("tags").getAsJsonObject();
 			JsonArray tagsJsonArray = (JsonArray) tagsObject.get("tag");
 			for(JsonElement tagsInArtist : tagsJsonArray){

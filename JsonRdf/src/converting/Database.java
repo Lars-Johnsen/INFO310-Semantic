@@ -26,14 +26,26 @@ public class Database {
 	String hei ="hei";
 	String merer="sds";
 	String lolol ="ssadsad";
+	public static Database database;
 	/**
 	 * Constructor of class Database
 	 * @param model
 	 */
-	public Database() {
+	private Database() {
 		String lol ="Hei";
 		String mer="HEHE";
 
+	}
+	/**
+	 * getInstance method to make sure we only work with one instance of the class
+	 * @return Database the database, with the model.
+	 */
+	public static Database getInstance(){
+		if (database == null){
+			database = new Database();
+			return database;
+		}
+		else return database;
 	}
 
 	public void SaveDB(Model model){

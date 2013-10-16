@@ -32,8 +32,8 @@ public class RdfCreator {
 	 */
 	public Model createRDF(ArrayList<GeoEvent> geoArray){
 		
-		
-		Model model = ModelFactory.createDefaultModel();
+		Database db = Database.getInstance();
+		Model model = db.getModel();
 		
 		for(GeoEvent geoEvent : geoArray){
 			String venueURL = geoEvent.getVenue().getUrl();
@@ -65,12 +65,16 @@ public class RdfCreator {
 			ArtistConverter artistConverter = new ArtistConverter();
 			Artist artist = artistConverter.convertArtist(jsonArtist);
 			
-			
+//			if(db.checkDBArtist(artist.getMbid()) == true){
+//				model.getRe
+//				
+//			}
 
 			
 			Resource artistResource = model.createResource(artist.getArtistURL());
 			artistResource.addProperty(RDFS.label, artist.getName())
-			.addProperty(DCTerms.identifier, artist.getMbid());
+			.addProperty(DCTerms.identifier, artist.getMbid())
+			.addProperty(RDF.type, "music:artist");
 			
 			for(String s : artist.getSimilarArtists()){
 				artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/similar_to"),s);

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 import javax.swing.JList;
 
@@ -30,7 +31,7 @@ public class ViewController implements ActionListener, MouseListener{
 	}
 
 	public void updateResultList(ArrayList<GeoEvent> result){
-
+		view.getResults().clear();
 		//IMAGE
 		//		MapDisplayer mapDisplayer= new MapDisplayer(); 
 		//		RenderedImage img = mapDisplayer.generateMap(result);
@@ -78,11 +79,11 @@ public class ViewController implements ActionListener, MouseListener{
 				ArrayList<GeoEvent> geoArray = geoEventConverter.eventDataGenerator(jsonObject);
 				RdfCreator rdfCreator = new RdfCreator();
 				rdfCreator.createRDF(geoArray);
-				
+
 
 			}
 
-			updateResultList(db.getModelInfo(term));
+			updateResultList(db.getModelInfoFromLocation(term));
 			db.sysoDB();
 			view.repaint();
 			view.validate();
@@ -115,6 +116,31 @@ public class ViewController implements ActionListener, MouseListener{
 			attend(event.getEventUrl());
 
 		}
+		else if(e.getActionCommand().equals("recommend")){
+			Database db = Database.getInstance();
+			LinkedHashSet<String>eventListNames = new LinkedHashSet<String>();
+			ArrayList<GeoEvent>eventList = new ArrayList<GeoEvent>();
+
+
+			eventListNames.addAll(db.sameArtistyouAttendedPlaysOnADifferentEvent());
+			eventListNames.addAll(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
+			eventListNames.addAll(db.getEventsBasedOnAttendedArtistsGenre());
+
+			//			eventListNames.addAll(db.getEventsAttended());
+			System.out.println("HIT: Samme artist har en konsert et annet sted");
+			System.out.println(db.sameArtistyouAttendedPlaysOnADifferentEvent());
+			System.out.println("HIT: En similar artist av en artist du attender har konsert");
+			System.out.println(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
+			System.out.println("HIT: En annen artist med lik genre har konsert");
+			System.out.println(db.getEventsBasedOnAttendedArtistsGenre());
+
+			for(String string : eventListNames){
+				eventList.add(db.getModelInfoFromEvent(string));
+			}
+			updateResultList(eventList);
+
+			//			updateResultList(db.getModelInfo(term));
+		}
 	}
 
 	public void attend (String Eventuri){
@@ -136,7 +162,7 @@ public class ViewController implements ActionListener, MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		@SuppressWarnings("unchecked")
-		JList<GeoEvent> list = (JList<GeoEvent>)e.getSource();
+		JList list = view.getResultList();
 		if (e.getClickCount() == 2) {
 			int index = list.locationToIndex(e.getPoint());
 			System.out.println(index);

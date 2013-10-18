@@ -64,7 +64,7 @@ public class RdfCreator {
 				.addProperty(RDF.type, "http://purl.org/ontology/mo/MusicArtist");
 
 				for(String s : artist.getSimilarArtists()){
-					artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/similar_to"),s);
+					artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/similar_to"),model.createResource(s));
 				}
 				for (String t : artist.getTags()){
 					artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/Genre"), t);

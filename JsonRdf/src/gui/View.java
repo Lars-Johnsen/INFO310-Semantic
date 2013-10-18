@@ -44,6 +44,7 @@ public class View extends JFrame {
 //	private JLabel 				mapShower = new JLabel();
 	private ViewController 			viewController = new ViewController(this);
 	private JButton					attend = new JButton("attend");
+	private JButton					recommend = new JButton("recommend");
 
 	private String stringForTest = "DETTE ER EN TEST STRENG OG SKAL";
 	/**
@@ -182,6 +183,7 @@ public class View extends JFrame {
 		inputArea.add(inputText);
 		inputArea.add(goButton);
 		inputArea.add(attend);
+		inputArea.add(recommend);
 		inputArea.setPreferredSize(new Dimension(500, 200));
 
 		northPanel.add(imageLabel);
@@ -213,6 +215,8 @@ public class View extends JFrame {
 		goButton.setActionCommand("Go!");
 		attend.addActionListener(viewController);
 		attend.setActionCommand("attend");
+		recommend.addActionListener(viewController);
+		recommend.setActionCommand("recommend");
 		
 
 		getContentPane().setLayout(new BorderLayout());

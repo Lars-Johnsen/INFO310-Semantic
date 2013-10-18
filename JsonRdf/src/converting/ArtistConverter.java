@@ -41,17 +41,16 @@ public class ArtistConverter {
 		}
 		if(artist.get("tags").isJsonObject()){
 			JsonObject tagsObject = artist.get("tags").getAsJsonObject();
-			if(tagsObject.isJsonArray()){
-				JsonArray tagsJsonArray = (JsonArray) tagsObject.get("tag");
+			JsonArray tagsJsonArray = (JsonArray) tagsObject.get("tag");
+			if(tagsJsonArray.isJsonArray()){	
 				for(JsonElement tagsInArtist : tagsJsonArray){
 					JsonObject tag = (JsonObject) tagsInArtist;
-
-
-					tagsArray.add(tag.get("url").getAsString());
+					tagsArray.add(tag.get("name").getAsString());
+					System.out.println(tag.get("name").getAsString());
 				}
 			}
 		}
-
+		
 		Artist artistInstance = new Artist(name, mbID, similarArtistsURL, tagsArray, artistURL);
 		return artistInstance;
 

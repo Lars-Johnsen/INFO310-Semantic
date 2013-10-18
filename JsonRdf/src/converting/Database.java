@@ -94,7 +94,7 @@ public class Database {
 		Model model = getModel();
 		String result ="";
 		String queryString = 
-						"SELECT ?ArtistURI" 
+				"SELECT ?ArtistURI" 
 						+ "	WHERE { "
 						+ "?ArtistURI <http://www.w3.org/2000/01/rdf-schema#label> \"" + artistnavn + "\" ; "
 						+ "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 'http://purl.org/ontology/mo/MusicArtist' ."
@@ -106,7 +106,7 @@ public class Database {
 
 		try {
 			ResultSet results = queryexec.execSelect() ;
-			System.out.println(results.hasNext());
+
 			while ( results.hasNext() ){
 
 				QuerySolution solution = results.nextSolution() ;
@@ -123,7 +123,7 @@ public class Database {
 	 * @param place
 	 * @return
 	 */
-	public ArrayList<GeoEvent> getModelInfo(String place){
+	public ArrayList<GeoEvent> getModelInfoFromLocation(String place){
 		Model model = getModel();
 
 		String queryString = 	
@@ -164,7 +164,7 @@ public class Database {
 
 		try {
 			ResultSet results = queryexec.execSelect() ;
-			System.out.println(results.hasNext());
+
 
 			while ( results.hasNext() ){
 
@@ -203,7 +203,85 @@ public class Database {
 		dataset.close();
 		return liste;
 	}
+	public GeoEvent getModelInfoFromEvent(String eventuri){
+		//IKKE OK, skal være som getModelInfoFromLocation, men heller benytte eventets URI.
+		Model model = getModel();
+		Resource eventresource = model.getResource(eventuri);
+		GeoEvent geoEvent = null;
+		String queryString = 	
+				//BRUKE * I STEDET FOR ï¿½ SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
+				"SELECT ?eventName ?eventID ?artist ?date ?venueName ?venueID ?lat ?long ?city ?country ?street" 
+				+ " ?postalcode ?venueURL ?eventwebsite ?event ?artist ?phonenumber" 
+				+ "	WHERE { "
+				+ "?event <http://xmlns.com/foaf/0.1/homepage> \"" + eventuri + "\" ."
+				+" ?event <http://purl.org/dc/elements/1.1/coverage> ?venue ;"
+				+ "<http://www.w3.org/2000/01/rdf-schema#label> ?eventName ;"
+				+ "<http://purl.org/dc/terms/identifier> ?eventID ;"
+				+ "<http://purl.org/dc/terms/date> ?date ;" 
+				+ "<http://purl.org/NET/c4dm/event.owl#place> ?venueURL ;"
+				+ "<http://xmlns.com/foaf/0.1/homepage> ?eventwebsite ;"
+				+ "<http://purl.org/ontology/mo/performer> ?artist ."
 
+						+ "?venue <http://www.w3.org/2000/01/rdf-schema#label> ?venueName ; "
+						+ "<http://purl.org/dc/terms/identifier> ?venueID . "
+
+						+ "?venue <http://www.w3.org/2002/07/owl#sameAs> ?VenueAddress . "
+						+ "?VenueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?place ; " 
+						+ "<http://www.w3.org/2003/01/geo/wgs84_pos/#lat> ?lat ;"
+						+ "<http://www.w3.org/2003/01/geo/wgs84_pos/#long> ?long ;"
+						+ "<http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?city ;"
+						+ "<http://www.w3.org/2001/vcard-rdf/3.0#Country> ?country ;"
+						+ "<http://www.w3.org/2001/vcard-rdf/3.0#Street> ?street ;"
+						+ "<http://www.w3.org/2001/vcard-rdf/3.0#Pcode> ?postalcode ;"
+						+ "<http://www.w3.org/2001/vcard-rdf/3.0#TEL> ?phonenumber ."
+						+ "}" ;
+
+
+		ArrayList<GeoEvent> liste = new ArrayList<GeoEvent>();
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+
+			while ( results.hasNext() ){
+
+				QuerySolution solution = results.nextSolution() ;
+
+
+				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
+				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
+
+				//PUTT INN I GEOEVENT!
+				geoEvent = new GeoEvent(solution.get("eventName").toString(), 
+						solution.get("eventID").toString(),
+						solution.get("eventName").toString(),
+						solution.get("date").toString(),
+						solution.get("venueName").toString(),
+						solution.get("venueID").toString(),
+						lat,
+						longitude,
+						solution.get("city").toString(),
+						solution.get("country").toString(),
+						solution.get("street").toString(),
+						solution.get("postalcode").toString(),
+						solution.get("venueURL").toString(),
+						solution.get("event").toString(),
+						solution.get("eventwebsite").toString(),
+						solution.get("phonenumber").toString()
+						);
+
+				liste.add(geoEvent);
+
+
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+		dataset.close();
+		return geoEvent;
+	}
 	/**
 	 * Creating model to use in other methods
 	 * @return model
@@ -230,18 +308,131 @@ public class Database {
 		UpdateRequest query = UpdateFactory.create(queryString) ;
 		UpdateAction.execute(query, model);
 		System.out.println("OMG");
-//		model.write(System.out);
+		//		model.write(System.out);
 		System.out.println(queryString);
 		System.out.println(eventResource);
 		System.out.println(eventURI);
 		dataset.close();
 	}
-	
+
 	/**
 	 * Prints out the database
 	 * Used just for checking
 	 */
 	public void sysoDB(){
 		getModel().write(System.out);
+	}
+
+	public ArrayList<String> sameArtistyouAttendedPlaysOnADifferentEvent(){
+		Model model = getModel();
+		ArrayList<String>eventList = new ArrayList<String>();
+		String queryString = 
+				"SELECT ?Event" 
+						+ "	WHERE { "
+						+ "FILTER (?Event != ?Attended) . "
+						+ "<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?Attended . "
+						+ "?Attended <http://purl.org/ontology/mo/performer> ?AttendedArtist . "
+						+ "?Event <http://purl.org/ontology/mo/performer> ?AttendedArtist . "
+						+ "}" ;
+
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+			while ( results.hasNext() ){
+				QuerySolution solution = results.nextSolution() ;
+				eventList.add(solution.getResource("?Event").getURI());
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+		return eventList;
+	}
+	public ArrayList<String> ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent(){
+		Model model = getModel();
+		ArrayList<String>eventlist = new ArrayList<String>();
+		String queryString = 
+				"SELECT ?Event" 
+						+ "	WHERE { "
+						+ "FILTER (?Event != ?Attended) . "
+						+ "<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?Attended . "
+						+ "?Attended <http://purl.org/ontology/mo/performer> ?AttendedArtist . "
+						+ "?AttendedArtist <http://purl.org/ontology/mo/similar_to> ?SimilarArtist . "
+						+ "?Event <http://purl.org/ontology/mo/performer> ?SimilarArtist . "
+						+ "}" ;
+
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+			while ( results.hasNext() ){
+				QuerySolution solution = results.nextSolution() ;
+				eventlist.add(solution.getResource("?Event").getURI());
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+		return eventlist;
+	}
+	public ArrayList<String> getEventsBasedOnAttendedArtistsGenre(){
+		Model model = getModel();
+		ArrayList<String> eventList = new ArrayList<String>();
+		String queryString = 
+				"SELECT DISTINCT ?Event" 
+						+ "	WHERE { "
+						+ "FILTER (?Event != ?Attended) . "
+						+ "<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?Attended . "
+						+ "?Attended <http://purl.org/ontology/mo/performer> ?AttendedArtist . "
+						+ "?AttendedArtist <http://purl.org/ontology/mo/Genre> ?AttendedArtistGenre . "
+						+ "?Event <http://purl.org/ontology/mo/performer> ?Artist . "
+						+ "?Artist <http://purl.org/ontology/mo/Genre> ?AttendedArtistGenre . "
+						+ "}" ;
+
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+			while ( results.hasNext() ){
+				QuerySolution solution = results.nextSolution() ;
+				eventList.add(solution.getResource("?Event").getURI());
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+		return eventList;
+	}
+	public ArrayList<String> getEventsAttended(){
+		ArrayList <String> eventsAttended = new ArrayList<String>();
+		Model model = getModel();
+		String queryString = 
+				"SELECT ?Attended" 
+						+ "	WHERE { "
+						+ "<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?Attended . "
+						+ "}" ;
+
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+			while ( results.hasNext() ){
+				QuerySolution solution = results.nextSolution() ;
+				eventsAttended.add(solution.getResource("?Attended").getURI());
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+		return eventsAttended;
 	}
 }

@@ -57,42 +57,13 @@ public class Database {
 		dataset.close();
 	}
 
-	/**
-	 * Test-method for queries
-	 */
-	//	public void Sparql(){
-	//		Model model = getModel();
-	//
-	//		String queryString = 
-	//				"SELECT ?venue WHERE { "
-	//						+ "?venue a \"music:Venue\" . " 
-	//						+ "}" ;
-	//
-	//		System.out.println(queryString);
-	//		Query query = QueryFactory.create(queryString) ;
-	//		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
-	//
-	//		try {
-	//			ResultSet results = queryexec.execSelect() ;
-	//
-	//			while ( results.hasNext() ){
-	//				QuerySolution solution = results.nextSolution() ;
-	//				System.out.println(solution.get("venue").toString());
-	//			}
-	//		} finally { 
-	//				queryexec.close() ; 
-	//			}
-	//
-	//		dataset.close();
-	//	}
 
 	/**
-	 * Checking if it exists a local file from param "place"
-	 * @param place
-	 * @return
+	 * Checking if it exists an event in the databse that has the location "place"
+	 * @param place, represents a place.
+	 * @return 
 	 */
 	public boolean checkDBLocation(String place){
-		String fjern="hei";
 		Model model = getModel();
 		Boolean result;
 		String queryString = 
@@ -112,6 +83,12 @@ public class Database {
 		dataset.close();
 		return result;
 	}
+	/**
+	 * Checks if the artist is registered in the database.
+	 * If it is, it returns the Resource URI of the artist.
+	 * @param artistnavn
+	 * @return
+	 */
 	public String checkDBArtist(String artistnavn){
 
 		Model model = getModel();
@@ -227,85 +204,6 @@ public class Database {
 		return liste;
 	}
 
-	//	public void getModelInfo2(String place){
-	//		Model model = getModel();
-	//
-	//		String queryString = 
-	//				//				"PREFIX dc: "
-	//
-	//				//BRUKE * I STEDET FOR � SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
-	//				"SELECT *" 
-	//				+ "	WHERE { "
-	//				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> \"" + place + "\" . "
-	//
-	//						+ "?venue <http://www.w3.org/2002/07/owl#sameAs> ?venueAddress ."
-	//
-	//						+ "?event <http://purl.org/dc/elements/1.1/coverage> ?venue ."
-	//
-	//						
-	//
-	//						+ "}" ;
-	//
-	//		System.out.println(queryString);
-	//
-	//		Query query = QueryFactory.create(queryString) ;
-	//		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
-	//		double geoLat = 0.0;
-	//		double geoLong = 0.0;
-	//		try {
-	//			ResultSet results = queryexec.execSelect() ;
-	//
-	//			while ( results.hasNext() ){
-	//				System.out.println("HER" + results.getRowNumber());
-	//				QuerySolution solution = results.nextSolution() ;
-	//				System.out.println(solution);
-	//
-	//				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
-	//				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
-	//
-	//				//PUTT INN I GEOEVENT!
-	//				GeoEvent geoEvent = new GeoEvent(solution.get("eventName").toString(), 
-	//						solution.get("eventID").toString(),
-	//						solution.get("eventName").toString(),
-	//						solution.get("date").toString(),
-	//						solution.get("venueName").toString(),
-	//						solution.get("venueID").toString(),
-	//						lat,
-	//						longitude,
-	//
-	//
-	//						solution.get("city").toString(),
-	//						solution.get("country").toString(),
-	//						solution.get("street").toString(),
-	//						solution.get("postalcode").toString(),
-	//						solution.get("venueURL").toString(),
-	//						solution.get("event").toString(),
-	//						solution.get("eventwebsite").toString(),
-	//						solution.get("phonenumber").toString()
-	//						);												
-	//
-	//				System.out.println(solution.get("date").toString());
-	//				System.out.println(solution.get("venueName").toString());
-	//				System.out.println(solution.get("venueID").toString());
-	//				System.out.println(solution.get("lat").toString());
-	//				System.out.println(solution.get("long").toString());
-	//				System.out.println(solution.get("city").toString());
-	//				System.out.println(solution.get("country").toString());
-	//				System.out.println(solution.get("street").toString());
-	//				System.out.println(solution.get("postalcode").toString());
-	//				System.out.println(solution.get("venueURL").toString()); //Ser ut til Œ vera korrekt!
-	//				System.out.println(solution.get("eventwebsite").toString()); //Ser ut til Œ vera bandwebsite
-	//				System.out.println(solution.get("event").toString()); //Ser ut til Œ vera LAST FM - Event website
-	//				System.out.println(solution.get("phonenumber").toString());
-	//				System.out.println("--------------------");
-	//
-	//			}
-	//		} finally { 
-	//			queryexec.close() ; 
-	//		}
-	//		dataset.close();
-	//	}
-
 	/**
 	 * Creating model to use in other methods
 	 * @return model
@@ -315,6 +213,10 @@ public class Database {
 		Model model = dataset.getDefaultModel();
 		return model;
 	}
+	/**
+	 * Inserts a predicate plansToAttend to the user with the actual event that the user plan to attend.
+	 * @param eventURI
+	 */
 	public void attend(String eventURI){
 		Model model = getModel();
 		String eventResource = "<" + eventURI +">";
@@ -334,6 +236,11 @@ public class Database {
 		System.out.println(eventURI);
 		dataset.close();
 	}
+	
+	/**
+	 * Prints out the database
+	 * Used just for checking
+	 */
 	public void sysoDB(){
 		getModel().write(System.out);
 	}

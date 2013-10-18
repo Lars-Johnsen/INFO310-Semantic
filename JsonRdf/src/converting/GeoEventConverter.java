@@ -1,36 +1,35 @@
 package converting;
 
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.util.ArrayList;
-
-import lastfmapi.lastfm.Geo;
-import lastfmapi.lastfm.Result;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import com.hp.hpl.jena.rdf.model.Model;
+
 
 public class GeoEventConverter {
-	static String musicURI    = "http://purl.org/ontology/mo/";
-	static String event     = "";
-	static String lastFmID     = "";
-	static String lastFmUrl     = "";
-	static String streamable     = "";
-	static String listeners     = "";
-	static String playCount     = "";
+	private static GeoEventConverter geoEventConverter;
 
 
-
-	public GeoEventConverter(){
-
+	private GeoEventConverter(){
+		geoEventConverter = new GeoEventConverter();
 	}
+	
+	public static GeoEventConverter getInstance(){
+		if(geoEventConverter == null) {
+			geoEventConverter = new GeoEventConverter();
+			return geoEventConverter;
+		}
+		else{
+			return geoEventConverter;
+		}
+	}
+	
 
 	/**
-	 * Getting data as JsonObjects
+	 * Converting GeoEvents from Json to Java objects, and
+	 * returns an arraylist of GeoEvents
 	 */
 	public ArrayList<GeoEvent> eventDataGenerator(JsonObject jsonObject){
 		ArrayList<GeoEvent> events = new ArrayList<GeoEvent>();
@@ -48,9 +47,7 @@ public class GeoEventConverter {
 				 */
 				JsonObject artists = event.getAsJsonObject("artists");
 				JsonPrimitive headliner = (JsonPrimitive)artists.getAsJsonPrimitive("headliner");
-
-				// HER ligger dataen
-				//TODO
+				
 				String Headliner = headliner.getAsString();
 				ArrayList<String> support = new ArrayList<String>();
 				String eventUrl = event.get("url").getAsString();
@@ -68,12 +65,9 @@ public class GeoEventConverter {
 				 * getting venue data.
 				 */
 				JsonObject venue = event.getAsJsonObject("venue");
-
 				JsonElement venuID = venue.get("id");
-
 				String StringID = venuID.getAsString();
 				String VenueName = venue.get("name").getAsString();
-
 				JsonObject location = venue.getAsJsonObject("location");
 
 				/**
@@ -100,7 +94,6 @@ public class GeoEventConverter {
 				String url = venue.get("url").getAsString();
 				String website = venue.get("website").getAsString();
 				String phone = venue.get("phonenumber").getAsString();
-				String bandWebPage = event.get("website").getAsString();
 				String date;
 
 				try{

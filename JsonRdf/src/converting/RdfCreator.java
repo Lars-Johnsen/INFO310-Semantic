@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.google.gson.JsonObject;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sparql.vocabulary.FOAF;
 import com.hp.hpl.jena.vocabulary.DC;
@@ -38,23 +36,18 @@ public class RdfCreator {
 		for(GeoEvent geoEvent : geoArray){
 			String venueURL = geoEvent.getVenue().getUrl();
 
-
 			//Resource event and adding it's properties
 
 			Resource event = model.createResource(geoEvent.getEventUrl());
 			event.addProperty(RDFS.label, model.createLiteral(geoEvent.getEventName()));
 
-			//			event.addProperty(RDF.type, model.createProperty("http://musicontology.com/#term_Performance"))
 			event.addProperty(DCTerms.identifier, geoEvent.getEventID())
 			.addProperty(DCTerms.date, geoEvent.getDate())
 
 			.addProperty(model.createProperty("http://purl.org/NET/c4dm/event.owl#place"), geoEvent.getVenue().getUrl());
 
-			/**
-			 * Adding av artist
-			 */
-			
 
+			//Adding an artist
 			String artistRessurs = db.checkDBArtist(geoEvent.getHeadliner());
 
 			if(artistRessurs.equals("")){
@@ -81,15 +74,12 @@ public class RdfCreator {
 				event.addProperty(model.createProperty("http://purl.org/ontology/mo/performer"), artistResource);
 			}
 			else{
-				System.out.println("Nееееееееееееееееееееееееееее");
+				System.out.println("NО©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫");
 				event.addProperty(model.createProperty("http://purl.org/ontology/mo/performer"), model.getResource(artistRessurs));	
 			}
 			if(!geoEvent.getEventWebsite().isEmpty()){
 				event.addProperty(FOAF.homepage, geoEvent.getEventWebsite());
 			}
-			/**
-			 * Slutt pц╔ adding av artist
-			 */
 
 			//Resource venue and adding it's properties
 			Resource venue = model.createResource(venueURL);
@@ -110,7 +100,7 @@ public class RdfCreator {
 			event.addProperty(DC.coverage, venue);
 
 		}
-		//		model.write(System.out);
+
 		return model;
 	}	
 

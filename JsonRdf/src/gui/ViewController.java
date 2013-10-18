@@ -83,7 +83,7 @@ public class ViewController implements ActionListener, MouseListener{
 
 			} else {
 				System.out.println("TERRRRM" + " " + term);
-				GeoEventConverter geoEventConverter = new GeoEventConverter();
+				GeoEventConverter geoEventConverter = GeoEventConverter.getInstance();
 				JsonObject jsonObject = res.getJsonObject();
 				ArrayList<GeoEvent> geoArray = geoEventConverter.eventDataGenerator(jsonObject);
 				RdfCreator rdfCreator = new RdfCreator();

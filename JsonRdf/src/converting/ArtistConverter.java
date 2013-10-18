@@ -1,21 +1,18 @@
 package converting;
 
-import java.io.FileReader;
+
 import java.util.ArrayList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class ArtistConverter {
-
+	
 	/**
 	 * Class for converting artistInfo from JSON format to, java objects.
 	 * @author Lars Johnsen
 	 * @return Artist return a java object of the artist.
 	 */
-
-
 	public Artist convertArtist(JsonObject artistObj){
 
 		JsonObject artist = artistObj.get("artist").getAsJsonObject();

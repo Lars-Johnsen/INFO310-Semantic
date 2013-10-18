@@ -9,11 +9,6 @@ public class GeoEvent {
 	private String bandwebsite;
 	private String eventWebsite;
 	
-	private String anders = "ANDERS";
-	private String lars = "LARS";
-	private String eskil = "ESKIL";
-	private String chris = "CHRIS";
-	
 	public GeoEvent(String eventName, String eventID, String headliner,
 			String date, String venueName,String venueId, double lat,double longitude,
 			String city,String country, String street, String postalCode, String venueURL, 
@@ -86,15 +81,6 @@ public class GeoEvent {
 	}
 
 
-//	public String toString() {
-//		return "GeoEvent [eventName=" + eventName + ", eventID=" + eventID
-//				+ ", headliner=" + headliner + ", date=" + date + ", venue="
-//				+ venue + ", getEventName()=" + getEventName()
-//				+ ", getEventID()=" + getEventID() + ", getHeadliner()="
-//				+ getHeadliner() + ", getDate()=" + getDate() + ", getVenue()="
-//				+ getVenue() + ", getClass()=" + getClass() + ", hashCode()="
-//				+ hashCode() + ", toString()=" + super.toString() + "]";
-//	}
 	public String toString(){
 		return eventName + " with " + headliner + "@" + getVenue();
 	}

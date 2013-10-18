@@ -1,19 +1,11 @@
 package gui;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JList;
 
 import lastfmapi.lastfm.Geo;
@@ -21,12 +13,10 @@ import lastfmapi.lastfm.Result;
 import lastfmapi.util.StringUtilities;
 
 import com.google.gson.JsonObject;
-import com.hp.hpl.jena.rdf.model.Model;
 
 import converting.Database;
 import converting.GeoEvent;
 import converting.GeoEventConverter;
-import converting.MapDisplayer;
 import converting.RdfCreator;
 
 public class ViewController implements ActionListener, MouseListener{
@@ -145,7 +135,8 @@ public class ViewController implements ActionListener, MouseListener{
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		JList list = (JList)e.getSource();
+		@SuppressWarnings("unchecked")
+		JList<GeoEvent> list = (JList<GeoEvent>)e.getSource();
 		if (e.getClickCount() == 2) {
 			int index = list.locationToIndex(e.getPoint());
 			System.out.println(index);

@@ -13,7 +13,9 @@ public class GeoEventConverter {
 
 
 	private GeoEventConverter(){
-		geoEventConverter = new GeoEventConverter();
+		
+		
+		
 	}
 	
 	public static GeoEventConverter getInstance(){

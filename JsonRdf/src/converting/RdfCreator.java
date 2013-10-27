@@ -43,7 +43,7 @@ public class RdfCreator {
 
 			event.addProperty(DCTerms.identifier, geoEvent.getEventID())
 			.addProperty(DCTerms.date, geoEvent.getDate())
-
+			.addProperty(RDF.type, "http://purl.org/ontology/mo/Performance")
 			.addProperty(model.createProperty("http://purl.org/NET/c4dm/event.owl#place"), geoEvent.getVenue().getUrl());
 
 

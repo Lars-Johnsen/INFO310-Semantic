@@ -22,6 +22,7 @@ import converting.RdfCreator;
 
 public class ViewController implements ActionListener, MouseListener{
 	private View view;
+	private ArrayList<String>searchterms = new ArrayList<String>();
 	public ViewController(View view){
 		this.view = view;
 
@@ -60,34 +61,44 @@ public class ViewController implements ActionListener, MouseListener{
 	}
 
 	public void search(String term){
+		Database db = Database.getInstance();
 
 		if(term.equals("")){
 			System.out.println("TOM-STRENG");
 		}
 		else{
 			term = StringUtilities.searchCheck(term);
-			view.getInputText().setText(term);
-			Result res = Geo.getAllEvents(term, "0", "64ecb66631fd1570172e9c44108b96d4");
-			Database db = Database.getInstance();
-			if(db.checkDBLocation(term)){
-				System.out.println("Finnes lokalt");
+			if(searchterms.contains(term.toString())){
+				System.out.println("SEARCHTERMS CONTAINS" + " " + term);
+			}
+			else{
 
-			} else {
-				System.out.println("TERRRRM" + " " + term);
+				view.getInputText().setText(term);
+				Result res = Geo.getAllEvents(term, "0", "64ecb66631fd1570172e9c44108b96d4");
+
 				GeoEventConverter geoEventConverter = GeoEventConverter.getInstance();
 				JsonObject jsonObject = res.getJsonObject();
 				ArrayList<GeoEvent> geoArray = geoEventConverter.eventDataGenerator(jsonObject);
+				ArrayList<GeoEvent> geoDuplicates = new ArrayList<GeoEvent>();
+				for(GeoEvent geoEvent : geoArray){
+					if(db.checkEvent(geoEvent.getEventUrl())){
+						geoDuplicates.add(geoEvent);
+						System.out.println("fjerner " + geoEvent.getEventUrl() + " fra lista");
+					}
+				}
+				geoArray.removeAll(geoDuplicates);
 				RdfCreator rdfCreator = new RdfCreator();
 				rdfCreator.createRDF(geoArray);
-
-
+				searchterms.add(term);
 			}
 
 			updateResultList(db.getModelInfoFromLocation(term));
-			db.sysoDB();
+
 			view.repaint();
 			view.validate();
+			
 		}
+
 	}
 	/**
 	 * Places info about an event on the east panel of the screen
@@ -117,6 +128,7 @@ public class ViewController implements ActionListener, MouseListener{
 
 		}
 		else if(e.getActionCommand().equals("recommend")){
+		
 			Database db = Database.getInstance();
 			LinkedHashSet<String>eventListNames = new LinkedHashSet<String>();
 			ArrayList<GeoEvent>eventList = new ArrayList<GeoEvent>();
@@ -139,7 +151,7 @@ public class ViewController implements ActionListener, MouseListener{
 			}
 			updateResultList(eventList);
 
-			//			updateResultList(db.getModelInfo(term));
+
 		}
 	}
 

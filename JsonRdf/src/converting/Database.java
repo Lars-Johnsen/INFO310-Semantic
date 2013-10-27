@@ -52,7 +52,6 @@ public class Database {
 	public void SaveDB(Model model){
 		Model dbModel = getModel();
 		dbModel.add(model);
-		//		dbModel.write(System.out);
 
 		dataset.close();
 	}
@@ -202,6 +201,42 @@ public class Database {
 		}
 		dataset.close();
 		return liste;
+	}
+	public void deleteEventsNotAttended(){
+		Model model = getModel();
+		String queryString = 
+				"DELETE  { "
+						+ "?event ?prop ?val }" 
+						+ "WHERE { "
+						+ "?event <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 'http://purl.org/ontology/mo/Performance' ."
+						+ " FILTER NOT EXISTS {<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?event}  "
+						+ "?event ?prop ?val"
+						+ "}" ;
+		System.out.println(queryString);
+
+		UpdateRequest query = UpdateFactory.create(queryString) ;
+		UpdateAction.execute(query, model);
+		dataset.close();
+
+	}
+	public boolean checkEvent(String eventuri){
+		Model model = getModel();
+		Boolean result;
+		String queryString = 
+				//BRUKE ASK I STEDET FOR SELECT!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!!!!!!!!!!!!!!!!!!!!!!
+				"ASK { "
+				+ "?event <http://xmlns.com/foaf/0.1/homepage> \"" + eventuri + "\" ."
+				+ "}" ;
+		System.out.println(queryString);
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			result = queryexec.execAsk() ;
+		} finally { queryexec.close() ; }
+		dataset.close();
+		return result;
 	}
 	public GeoEvent getModelInfoFromEvent(String eventuri){
 		//IKKE OK, skal være som getModelInfoFromLocation, men heller benytte eventets URI.

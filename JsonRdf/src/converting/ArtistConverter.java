@@ -41,6 +41,9 @@ public class ArtistConverter {
 		}
 		if(artist.get("tags").isJsonObject()){
 			JsonObject tagsObject = artist.get("tags").getAsJsonObject();
+			System.out.println(tagsObject);
+			JsonElement obj = tagsObject.get("tag");
+			if(obj.isJsonArray()){
 			JsonArray tagsJsonArray = (JsonArray) tagsObject.get("tag");
 			if(tagsJsonArray.isJsonArray()){	
 				for(JsonElement tagsInArtist : tagsJsonArray){
@@ -48,6 +51,10 @@ public class ArtistConverter {
 					tagsArray.add(tag.get("name").getAsString());
 					System.out.println(tag.get("name").getAsString());
 				}
+			}
+		}
+			else{
+				
 			}
 		}
 		

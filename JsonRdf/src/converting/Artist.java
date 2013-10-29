@@ -8,14 +8,28 @@ public class Artist {
 	private ArrayList<String> similarArtists;
 	private ArrayList<String> tags;
 	private String artistURL;
+	private String bio;
 
 	public Artist(String name, String mbid, ArrayList<String> similar, ArrayList<String> tags,
-			String artistURL){
+			String artistURL, String bioBeforetransform){
 		this.name = name;
 		this.mbid = mbid;
 		this.similarArtists = similar;
 		this.tags = tags;
 		this.artistURL = artistURL;
+		
+		this.bio = bioBeforetransform.trim().replaceAll(" +", " ").replaceAll("[\\t\\n\\r]"," ");;
+		
+		
+		
+	}
+
+	public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
 	}
 
 	public String getName() {

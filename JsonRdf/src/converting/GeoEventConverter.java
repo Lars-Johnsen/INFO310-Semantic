@@ -2,6 +2,7 @@ package converting;
 
 
 import java.util.ArrayList;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -41,7 +42,7 @@ public class GeoEventConverter {
 
 			for(JsonElement s : eventOb){
 				JsonObject event = s.getAsJsonObject();
-				String artist = event.get("title").getAsString();
+				String eventName = event.get("title").getAsString();
 				String eventID = event.get("id").getAsString();
 
 				/**
@@ -104,9 +105,9 @@ public class GeoEventConverter {
 					e.printStackTrace();
 					date = "010101";
 				}
+				
 
-
-				GeoEvent geoEvent = new GeoEvent(artist, eventID, Headliner,date, VenueName, StringID,
+				GeoEvent geoEvent = new GeoEvent(eventName, eventID, Headliner,date, VenueName, StringID,
 						geoLat, geoLong, city, country, street, postalCode, url, website, eventUrl, phone);
 				events.add(geoEvent);
 			}

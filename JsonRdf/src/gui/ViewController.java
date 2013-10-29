@@ -78,8 +78,10 @@ public class ViewController implements ActionListener, MouseListener{
 
 				GeoEventConverter geoEventConverter = GeoEventConverter.getInstance();
 				JsonObject jsonObject = res.getJsonObject();
+				
 				ArrayList<GeoEvent> geoArray = geoEventConverter.eventDataGenerator(jsonObject);
 				ArrayList<GeoEvent> geoDuplicates = new ArrayList<GeoEvent>();
+				
 				for(GeoEvent geoEvent : geoArray){
 					if(db.checkEvent(geoEvent.getEventUrl())){
 						geoDuplicates.add(geoEvent);
@@ -112,13 +114,17 @@ public class ViewController implements ActionListener, MouseListener{
 		view.getDateArea().setText(geo.getDate());
 		view.getVenueArea().setText(geo.getVenue().getName());
 		view.getBandWebsiteArea().setText(geo.getEventWebsite());
+		System.out.println(geo.getArtist().getName());
+		System.out.println(geo.getArtist().getBio());
+		view.getArtistBioArea().setText(geo.getArtist().getBio());
 		view.getImagePanel().removeAll();
 		view.getDetailsPanel().setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("Go!")){
+		
+		if(e.getSource().equals(view.getInputText())){
 			view.getResults().clear();
 			search(view.getInputText().getText());
 		}
@@ -179,6 +185,7 @@ public class ViewController implements ActionListener, MouseListener{
 			int index = list.locationToIndex(e.getPoint());
 			System.out.println(index);
 			GeoEvent clickedEvent = (GeoEvent) view.getResults().get(index);
+			view.getUserResponseButtonPanel().setVisible(true);
 			placeGeoElementOnScreen(clickedEvent);
 		} else if (e.getClickCount() == 3) {   // Triple-click
 			int index = list.locationToIndex(e.getPoint());

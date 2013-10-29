@@ -1,11 +1,14 @@
 package converting;
 
+import com.google.gson.JsonObject;
+
 public class GeoEvent {
 	private String eventName;
 	private String eventID;
 	private String headliner;
 	private String date;
 	private Venue venue;
+	private Artist artist;
 	private String bandwebsite;
 	private String eventWebsite;
 	
@@ -20,10 +23,35 @@ public class GeoEvent {
 		this.venue = new Venue(venueName,venueId, lat, longitude, city, country, street, postalCode, venueURL,
 				website, phonenumber);
 		this.bandwebsite = lastFMEventUrl;
-		this.eventWebsite = lastFMEventUrl;		
+		this.eventWebsite = lastFMEventUrl;	
+		this.artist = artist;
+		
+		
+		
+		
+		lastfmapi.lastfm.Artist lastFmArtist = new lastfmapi.lastfm.Artist();
+		JsonObject jsonArtist = lastFmArtist.getInfo(headliner, "64ecb66631fd1570172e9c44108b96d4").getJsonObject();
+
+
+		
+		ArtistConverter artistConverter = new ArtistConverter();
+		artist = artistConverter.convertArtist(jsonArtist);
+		
+		System.out.println(artist.getBio() + "!!!!!!!!!!!!");
+
 	}
 	
 	
+	public Artist getArtist() {
+		return artist;
+	}
+
+
+	public void setArtist(Artist artist) {
+		this.artist = artist;
+	}
+
+
 	public String getEventWebsite() {
 		return eventWebsite;
 	}

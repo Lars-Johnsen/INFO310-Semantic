@@ -28,10 +28,13 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class View extends JFrame {
 
 	private JPanel			northPanel = new JPanel();
+	private JPanel			northLogoPanel = new JPanel();
+	private JPanel			northSearchPanel = new JPanel();
 	private JPanel			westPanel = new JPanel();
 	private JPanel			eastPanel = new JPanel();
 	private JPanel			detailsPanel = new JPanel();
@@ -45,6 +48,7 @@ public class View extends JFrame {
 	private ViewController 			viewController = new ViewController(this);
 	private JButton					attend = new JButton("attend");
 	private JButton					recommend = new JButton("recommend");
+	private JPanel			UserResponseButtonPanel = new JPanel();
 
 	private String stringForTest = "DETTE ER EN TEST STRENG OG SKAL";
 	/**
@@ -78,7 +82,35 @@ public class View extends JFrame {
 	private JLabel eventWebsiteArea = new JLabel(stringForTest);
 	private JPanel eventWebsitePanel = new JPanel();
 	
+	private JLabel ArtistBioLabel = new JLabel("Bio:");
+	private JTextArea artistBioArea = new JTextArea(stringForTest);
+	private JPanel artistBioPanel = new JPanel();
 	
+	
+
+	public JLabel getArtistBioLabel() {
+		return ArtistBioLabel;
+	}
+
+	public void setArtistBioLabel(JLabel artistBioLabel) {
+		ArtistBioLabel = artistBioLabel;
+	}
+
+	public JTextArea getArtistBioArea() {
+		return artistBioArea;
+	}
+
+	public void setArtistBioArea(JTextArea artistBioArea) {
+		this.artistBioArea = artistBioArea;
+	}
+
+	public JPanel getArtistBioPanel() {
+		return artistBioPanel;
+	}
+
+	public void setArtistBioPanel(JPanel artistBioPanel) {
+		this.artistBioPanel = artistBioPanel;
+	}
 
 	public View(){
 		setupInterFace();
@@ -86,7 +118,7 @@ public class View extends JFrame {
 
 	private void setupInterFace() {	
 		this.setPreferredSize(new Dimension(1024, 1224));
-
+		inputText.addActionListener(viewController);
 		inputText.setPreferredSize(new Dimension(100, 20));
 		resultList.setPreferredSize(new Dimension(100, 200));
 //		mapShower.setPreferredSize(new Dimension(400, 300));
@@ -96,8 +128,11 @@ public class View extends JFrame {
 		
 //		mapShower.setBackground(Color.BLACK);
 		northPanel.removeAll();
+		northPanel.setLayout(new BorderLayout());
 		northPanel.setPreferredSize(new Dimension(1024, 120));
 		northPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+		
+		
 		
 		southPanel.removeAll();
 		southPanel.setPreferredSize(new Dimension(1024, 120));
@@ -123,15 +158,15 @@ public class View extends JFrame {
 
 
 
-		JLabel inputTextLabel = new JLabel("Type in your area:");
+		JLabel inputTextLabel = new JLabel("Search for Concert or Artist:");
 		JPanel inputArea = new JPanel();
 
 
 
 		//Code for creating the Eventname area
 
-		Dimension detailPanelDimension = new Dimension(400, 50);
-		Dimension resultListDimension = new Dimension(400, 200);
+		Dimension detailPanelDimension = new Dimension(400, 25);
+		Dimension resultListDimension = new Dimension(500, 200);
 
 		inputText.setPreferredSize(detailPanelDimension);
 
@@ -175,35 +210,63 @@ public class View extends JFrame {
 		eventWebsitePanel.add(eventWebsiteLabel);
 		eventWebsitePanel.add(eventWebsiteArea);
 		eventWebsitePanel.setPreferredSize(detailPanelDimension);
-
-
 		
+		artistBioPanel.add(ArtistBioLabel);
+		artistBioPanel.setLayout(new BorderLayout(5,5));
+		artistBioArea.setEditable(false);
+		artistBioArea.setBackground(detailsPanel.getBackground());
+		artistBioArea.setLineWrap(true);
+		artistBioArea.setWrapStyleWord(true);
+		artistBioPanel.add(artistBioArea);
 
+		artistBioPanel.setPreferredSize(new Dimension(400, 300));
+		this.revalidate();
+		this.repaint();
+
+		inputArea.setLayout(new BoxLayout(inputArea, BoxLayout.Y_AXIS));
+		
+		JLabel searchDescription = new JLabel("	- For example: Cher, Hulen, O2 Arena");
+		
+		searchDescription.setFont(searchDescription.getFont().deriveFont(10.0f));
 		inputArea.add(inputTextLabel);
 		inputArea.add(inputText);
-		inputArea.add(goButton);
-		inputArea.add(attend);
-		inputArea.add(recommend);
-		inputArea.setPreferredSize(new Dimension(500, 200));
-
-		northPanel.add(imageLabel);
+		inputArea.add(searchDescription);
+		
+		inputArea.setPreferredSize(new Dimension(250, 75));
+		
+		northPanel.add(northLogoPanel, BorderLayout.WEST);
+		northPanel.add(northSearchPanel, BorderLayout.EAST);
+		northLogoPanel.add(imageLabel);
 		resultList.setPreferredSize(resultListDimension);
 		
-		westPanel.add(inputArea);
+		resultList.setBackground(westPanel.getBackground());
+		resultList.setBorder(new EmptyBorder(10,10,10,10));
+		
+		
+		UserResponseButtonPanel.add(attend);
+		UserResponseButtonPanel.add(recommend);
+		
+		northSearchPanel.add(inputArea);
 		westPanel.add(resultList);
-
+		westPanel.add(UserResponseButtonPanel);
+		
+		UserResponseButtonPanel.setVisible(false);
+		
 		detailsPanel.add(eventNamePanel);
 		detailsPanel.add(eventIdpanel);
 		detailsPanel.add(headlinerpanel);
 		detailsPanel.add(datePanel);
 		detailsPanel.add(venuePanel);
 		detailsPanel.add(BandWebsitePanel);
-		detailsPanel.add(eventWebsitePanel);
+		detailsPanel.add(artistBioPanel);
+	
 
-		
+		detailsPanel.setPreferredSize(new Dimension(500, 900));
 		detailsPanel.setVisible(false);
+		
 		eastPanel.add(detailsPanel);
-		eastPanel.add(imagePanel);
+//		eastPanel.setBackground(Color.BLACK);
+//		eastPanel.add(imagePanel);
 		
 		goButton.setBorderPainted(false);
 		goButton.setContentAreaFilled(false);
@@ -229,6 +292,14 @@ public class View extends JFrame {
 		this.setVisible(true);
 		this.pack();
 		this.setBounds(0, 0, 1024, 768);
+	}
+
+	public JPanel getUserResponseButtonPanel() {
+		return UserResponseButtonPanel;
+	}
+
+	public void setUserResponseButtonPanel(JPanel userResponseButtonPanel) {
+		UserResponseButtonPanel = userResponseButtonPanel;
 	}
 
 	public JPanel getDetailsPanel() {

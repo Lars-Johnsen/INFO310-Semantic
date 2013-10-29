@@ -61,7 +61,8 @@ public class RdfCreator {
 				Resource artistResource = model.createResource(artist.getArtistURL());
 				artistResource.addProperty(RDFS.label, artist.getName())
 				.addProperty(DCTerms.identifier, artist.getMbid())
-				.addProperty(RDF.type, "http://purl.org/ontology/mo/MusicArtist");
+				.addProperty(RDF.type, "http://purl.org/ontology/mo/MusicArtist")
+				.addProperty(model.createProperty("http://purl.org/ontology/mo/biography"), artist.getBio());
 
 				for(String s : artist.getSimilarArtists()){
 					artistResource.addProperty(model.createProperty("http://purl.org/ontology/mo/similar_to"),model.createResource(s));

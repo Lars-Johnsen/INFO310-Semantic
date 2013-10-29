@@ -14,7 +14,8 @@ public class ArtistConverter {
 	 * @return Artist return a java object of the artist.
 	 */
 	public Artist convertArtist(JsonObject artistObj){
-
+		
+		if(artistObj.get("artist") != null){
 		JsonObject artist = artistObj.get("artist").getAsJsonObject();
 		ArrayList<String> similarArtistsURL = new ArrayList<String>();
 		ArrayList<String> tagsArray = new ArrayList<String>();
@@ -22,6 +23,8 @@ public class ArtistConverter {
 		String name = artist.get("name").getAsString();
 		String mbID = artist.get("mbid").getAsString();
 		String artistURL = artist.get("url").getAsString();
+		JsonObject bioObject = artist.get("bio").getAsJsonObject();
+		String bio = bioObject.get("summary").getAsString();
 
 		//Similar comes in an array of JsonObjects as URLS to lastfm.
 		if(artist.get("similar").isJsonObject()){
@@ -58,9 +61,11 @@ public class ArtistConverter {
 			}
 		}
 		
-		Artist artistInstance = new Artist(name, mbID, similarArtistsURL, tagsArray, artistURL);
+		Artist artistInstance = new Artist(name, mbID, similarArtistsURL, tagsArray, artistURL, bio);
 		return artistInstance;
 
+	}else{return null;
+	}
 	}
 
 }

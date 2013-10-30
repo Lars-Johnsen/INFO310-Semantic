@@ -71,7 +71,7 @@ public class Database {
 				+ "FILTER (?place =\"" + place + "\" || regex(?place,\"" + place + "\"))."
 				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?place ; " 
 				+ "}" ;
-		System.out.println(queryString);
+
 
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
@@ -98,7 +98,6 @@ public class Database {
 						+ "?ArtistURI <http://www.w3.org/2000/01/rdf-schema#label> \"" + artistnavn + "\" ; "
 						+ "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 'http://purl.org/ontology/mo/MusicArtist' ."
 						+ "}" ;
-		System.out.println(queryString);
 
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
@@ -112,6 +111,7 @@ public class Database {
 				result = solution.getResource("ArtistURI").getURI();
 			}
 		} finally { 
+
 			queryexec.close() ; 
 		}
 		return result;
@@ -127,8 +127,8 @@ public class Database {
 
 		String queryString = 	
 				//BRUKE * I STEDET FOR ï¿½ SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
-				"SELECT ?eventName ?eventID ?artist ?date ?venueName ?venueID ?lat ?long ?city ?country ?street" 
-				+ " ?postalcode ?venueURL ?eventwebsite ?event ?artist ?phonenumber" 
+				"SELECT  ?eventName ?eventID ?artist ?date ?venueName ?venueID ?lat ?long ?city ?country ?street" 
+				+ " ?postalcode ?venueURL ?eventwebsite ?event ?artist ?phonenumber ?genre ?bio ?similar_to ?artistName" 
 				+ "	WHERE { "
 				+ "FILTER (?place =\"" + place + "\" || regex(?place,\"" + place + "\"))."
 				+ "?venueAddress <http://www.w3.org/2001/vcard-rdf/3.0#Locality> ?place ; " 
@@ -153,9 +153,13 @@ public class Database {
 						+ "?venue <http://www.w3.org/2000/01/rdf-schema#label> ?venueName ;"
 						+ "<http://purl.org/dc/terms/identifier> ?venueID ."
 
+
+						+ "?artist <http://www.w3.org/2000/01/rdf-schema#label> ?artistName ."	
+						+ "?artist <http://purl.org/ontology/mo/biography> ?bio ."
+
 						+ "}" ;
 
-		System.out.println(queryString);
+
 
 		ArrayList<GeoEvent> liste = new ArrayList<GeoEvent>();
 		Query query = QueryFactory.create(queryString) ;
@@ -174,9 +178,13 @@ public class Database {
 				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
 
 				//PUTT INN I GEOEVENT!
+				//Bruker konstruktør2
+
+
+
 				GeoEvent geoEvent = new GeoEvent(solution.get("eventName").toString(), 
 						solution.get("eventID").toString(),
-						solution.get("eventName").toString(),
+						solution.get("artistName").toString(),
 						solution.get("date").toString(),
 						solution.get("venueName").toString(),
 						solution.get("venueID").toString(),
@@ -189,10 +197,15 @@ public class Database {
 						solution.get("venueURL").toString(),
 						solution.get("event").toString(),
 						solution.get("eventwebsite").toString(),
-						solution.get("phonenumber").toString()
+						solution.get("phonenumber").toString(), 
+						getGenreArtist(solution.get("artistName").toString()), 
+						solution.get("bio").toString(), 
+						getSimilar_toArtist(solution.get("artistName").toString()), 
+						solution.get("artistName").toString(), 
+						solution.getResource("artist").getURI()
 						);
-
 				liste.add(geoEvent);
+
 
 
 			}
@@ -201,6 +214,68 @@ public class Database {
 		}
 		dataset.close();
 		return liste;
+	}
+	public ArrayList<String> getSimilar_toArtist(String artistnavn){
+
+		Model model = getModel();
+		ArrayList<String> similar_to = new ArrayList<String>();
+		String queryString = 
+				"SELECT ?similar_to" 
+						+ "	WHERE { "
+						+ "?ArtistURI <http://www.w3.org/2000/01/rdf-schema#label> \"" + artistnavn + "\" ; "
+						+ "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 'http://purl.org/ontology/mo/MusicArtist' ;"
+						+ "<http://purl.org/ontology/mo/similar_to> ?similar_to ."
+						+ "}" ;
+
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+			while ( results.hasNext() ){
+
+				QuerySolution solution = results.nextSolution() ;
+				similar_to.add(solution.get("?similar_to").toString());
+
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+		return similar_to;
+	}
+
+	public ArrayList<String> getGenreArtist(String artistnavn){
+
+		Model model = getModel();
+		ArrayList<String> genre = new ArrayList<String>();
+		String queryString = 
+				"SELECT ?genre" 
+						+ "	WHERE { "
+						+ "?ArtistURI <http://www.w3.org/2000/01/rdf-schema#label> \"" + artistnavn + "\" ; "
+						+ "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> 'http://purl.org/ontology/mo/MusicArtist' ;"
+						+ "<http://purl.org/ontology/mo/Genre> ?genre ."
+						+ "}" ;
+
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+			while ( results.hasNext() ){
+
+				QuerySolution solution = results.nextSolution() ;
+				genre.add(solution.get("genre").toString());
+
+
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+		return genre;
 	}
 	public void deleteEventsNotAttended(){
 		Model model = getModel();
@@ -212,7 +287,7 @@ public class Database {
 						+ " FILTER NOT EXISTS {<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?event}  "
 						+ "?event ?prop ?val"
 						+ "}" ;
-		System.out.println(queryString);
+
 
 		UpdateRequest query = UpdateFactory.create(queryString) ;
 		UpdateAction.execute(query, model);
@@ -227,7 +302,7 @@ public class Database {
 				"ASK { "
 				+ "?event <http://xmlns.com/foaf/0.1/homepage> \"" + eventuri + "\" ."
 				+ "}" ;
-		System.out.println(queryString);
+
 
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
@@ -241,12 +316,11 @@ public class Database {
 	public GeoEvent getModelInfoFromEvent(String eventuri){
 		//IKKE OK, skal være som getModelInfoFromLocation, men heller benytte eventets URI.
 		Model model = getModel();
-		Resource eventresource = model.getResource(eventuri);
 		GeoEvent geoEvent = null;
 		String queryString = 	
 				//BRUKE * I STEDET FOR ï¿½ SKRIVE ALLE VARIABLENE VI VIL HA UT!!!!!!!
 				"SELECT ?eventName ?eventID ?artist ?date ?venueName ?venueID ?lat ?long ?city ?country ?street" 
-				+ " ?postalcode ?venueURL ?eventwebsite ?event ?artist ?phonenumber" 
+				+ " ?postalcode ?venueURL ?eventwebsite ?event ?artist ?phonenumber ?artistName ?bio" 
 				+ "	WHERE { "
 				+ "?event <http://xmlns.com/foaf/0.1/homepage> \"" + eventuri + "\" ."
 				+" ?event <http://purl.org/dc/elements/1.1/coverage> ?venue ;"
@@ -269,6 +343,9 @@ public class Database {
 						+ "<http://www.w3.org/2001/vcard-rdf/3.0#Street> ?street ;"
 						+ "<http://www.w3.org/2001/vcard-rdf/3.0#Pcode> ?postalcode ;"
 						+ "<http://www.w3.org/2001/vcard-rdf/3.0#TEL> ?phonenumber ."
+
+						+ "?artist <http://www.w3.org/2000/01/rdf-schema#label> ?artistName ."	
+						+ "?artist <http://purl.org/ontology/mo/biography> ?bio ."
 						+ "}" ;
 
 
@@ -287,7 +364,7 @@ public class Database {
 
 				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
 				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
-
+				System.out.println("ARTISTNAVN: " + solution.get("artistName").toString());
 				//PUTT INN I GEOEVENT!
 				geoEvent = new GeoEvent(solution.get("eventName").toString(), 
 						solution.get("eventID").toString(),
@@ -304,7 +381,12 @@ public class Database {
 						solution.get("venueURL").toString(),
 						solution.get("event").toString(),
 						solution.get("eventwebsite").toString(),
-						solution.get("phonenumber").toString()
+						solution.get("phonenumber").toString(),						
+						getGenreArtist(solution.get("artistName").toString()), 
+						solution.get("bio").toString(), 
+						getSimilar_toArtist(solution.get("artistName").toString()), 
+						solution.get("artistName").toString(), 
+						solution.getResource("artist").getURI()
 						);
 
 				liste.add(geoEvent);
@@ -331,6 +413,7 @@ public class Database {
 	 * @param eventURI
 	 */
 	public void attend(String eventURI){
+		System.out.println("ATTEND");
 		Model model = getModel();
 		String eventResource = "<" + eventURI +">";
 		String queryString = 
@@ -342,11 +425,6 @@ public class Database {
 
 		UpdateRequest query = UpdateFactory.create(queryString) ;
 		UpdateAction.execute(query, model);
-		System.out.println("OMG");
-		//		model.write(System.out);
-		System.out.println(queryString);
-		System.out.println(eventResource);
-		System.out.println(eventURI);
 		dataset.close();
 	}
 

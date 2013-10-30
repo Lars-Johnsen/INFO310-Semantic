@@ -10,7 +10,7 @@ public class Artist {
 	private String artistURL;
 	private String bio;
 
-	public Artist(String name, String mbid, ArrayList<String> similar, ArrayList<String> tags,
+	public Artist(String name, ArrayList<String> similar, ArrayList<String> tags,
 			String artistURL, String bioBeforetransform){
 		this.name = name;
 		this.mbid = mbid;

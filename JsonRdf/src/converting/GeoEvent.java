@@ -1,5 +1,7 @@
 package converting;
 
+import java.util.ArrayList;
+
 import com.google.gson.JsonObject;
 
 public class GeoEvent {
@@ -24,7 +26,7 @@ public class GeoEvent {
 				website, phonenumber);
 		this.bandwebsite = lastFMEventUrl;
 		this.eventWebsite = lastFMEventUrl;	
-		this.artist = artist;
+	
 		
 		
 		
@@ -35,10 +37,25 @@ public class GeoEvent {
 
 		
 		ArtistConverter artistConverter = new ArtistConverter();
-		artist = artistConverter.convertArtist(jsonArtist);
-		
-		System.out.println(artist.getBio() + "!!!!!!!!!!!!");
 
+		this.artist = artistConverter.convertArtist(jsonArtist);
+		
+
+
+	}
+	public GeoEvent(String eventName, String eventID, String headliner,
+			String date, String venueName,String venueId, double lat,double longitude,
+			String city,String country, String street, String postalCode, String venueURL, 
+			String website, String lastFMEventUrl, String phonenumber, ArrayList<String> tags, String bio, ArrayList<String> similar_to, String artistName, String artistURL) {
+		this.eventName = eventName;
+		this.eventID = eventID;
+		this.headliner = headliner;
+		this.date = date;
+		this.venue = new Venue(venueName,venueId, lat, longitude, city, country, street, postalCode, venueURL,
+				website, phonenumber);
+		this.bandwebsite = lastFMEventUrl;
+		this.eventWebsite = lastFMEventUrl;	
+		this.artist = new Artist(artistName, similar_to, tags, artistURL, bio);
 	}
 	
 	

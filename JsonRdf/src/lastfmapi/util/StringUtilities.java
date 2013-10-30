@@ -191,15 +191,26 @@ public final class StringUtilities {
 	 * @return
 	 */
 	public static String searchCheck(String searchterm){
-		
+
 		String termLowerCase = searchterm.toLowerCase();
-		
-		Character forbokstav = Character.toUpperCase(termLowerCase.charAt(0));
-		String resten = termLowerCase.substring(1, termLowerCase.length());
-		String term = forbokstav + resten;
 
-
-		System.out.println(term);
+		String[] words = termLowerCase.split(" ");  
+		String term="";
+		int x=0;
+		for (String word : words)  
+		{  
+			Character forbokstav = Character.toUpperCase(word.charAt(0));
+			String resten = word.substring(1, word.length());
+			String termen = forbokstav + resten;
+			if(x>0){
+				
+				term += " " + termen;
+			}
+			else{
+				term += termen;
+			}
+			x++;
+		}  
 		return term;
 	}
 }

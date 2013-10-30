@@ -3,6 +3,9 @@ package converting;
 
 import java.util.ArrayList;
 
+import lastfmapi.lastfm.Artist;
+import lastfmapi.lastfm.Result;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,11 +17,11 @@ public class GeoEventConverter {
 
 
 	private GeoEventConverter(){
-		
-		
-		
+
+
+
 	}
-	
+
 	public static GeoEventConverter getInstance(){
 		if(geoEventConverter == null) {
 			geoEventConverter = new GeoEventConverter();
@@ -28,7 +31,7 @@ public class GeoEventConverter {
 			return geoEventConverter;
 		}
 	}
-	
+
 
 	/**
 	 * Converting GeoEvents from Json to Java objects, and
@@ -50,7 +53,7 @@ public class GeoEventConverter {
 				 */
 				JsonObject artists = event.getAsJsonObject("artists");
 				JsonPrimitive headliner = (JsonPrimitive)artists.getAsJsonPrimitive("headliner");
-				
+
 				String Headliner = headliner.getAsString();
 				ArrayList<String> support = new ArrayList<String>();
 				String eventUrl = event.get("url").getAsString();
@@ -105,11 +108,22 @@ public class GeoEventConverter {
 					e.printStackTrace();
 					date = "010101";
 				}
-				
-
-				GeoEvent geoEvent = new GeoEvent(eventName, eventID, Headliner,date, VenueName, StringID,
-						geoLat, geoLong, city, country, street, postalCode, url, website, eventUrl, phone);
-				events.add(geoEvent);
+				System.out.println("FØR HEADLINER2");
+				Result jsonArtist = Artist.getInfo(Headliner, "64ecb66631fd1570172e9c44108b96d4");
+				System.out.println("HEADLINER2: " + Headliner);
+				if(!jsonArtist.isSuccessful()){
+					System.out.println("INGEN ARTIST");
+				}
+				else{
+					
+					GeoEvent geoEvent = new GeoEvent(eventName, eventID, Headliner,date, VenueName, StringID,
+							geoLat, geoLong, city, country, street, postalCode, url, website, eventUrl, phone);
+					events.add(geoEvent);
+				}
+			}
+			System.out.println("ALLE SOM GÅR I BASEN");
+			for(GeoEvent geo : events){
+				System.out.println(geo.getHeadliner());
 			}
 
 		}

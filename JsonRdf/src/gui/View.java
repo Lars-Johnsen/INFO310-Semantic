@@ -120,7 +120,7 @@ public class View extends JFrame {
 		this.setPreferredSize(new Dimension(1024, 1224));
 		inputText.addActionListener(viewController);
 		inputText.setPreferredSize(new Dimension(100, 20));
-		resultList.setPreferredSize(new Dimension(100, 200));
+	
 //		mapShower.setPreferredSize(new Dimension(400, 300));
 //		mapShower.setBorder(BorderFactory.createBevelBorder(DEFAULT_CURSOR));
 		
@@ -220,7 +220,7 @@ public class View extends JFrame {
 		artistBioPanel.add(artistBioArea);
 
 		artistBioPanel.setPreferredSize(new Dimension(400, 300));
-		this.revalidate();
+		this.validate();
 		this.repaint();
 
 		inputArea.setLayout(new BoxLayout(inputArea, BoxLayout.Y_AXIS));
@@ -237,7 +237,7 @@ public class View extends JFrame {
 		northPanel.add(northLogoPanel, BorderLayout.WEST);
 		northPanel.add(northSearchPanel, BorderLayout.EAST);
 		northLogoPanel.add(imageLabel);
-		resultList.setPreferredSize(resultListDimension);
+		resultList.setPreferredSize(new Dimension(500, 425));
 		
 		resultList.setBackground(westPanel.getBackground());
 		resultList.setBorder(new EmptyBorder(10,10,10,10));

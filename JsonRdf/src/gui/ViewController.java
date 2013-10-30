@@ -92,6 +92,7 @@ public class ViewController implements ActionListener, MouseListener{
 				RdfCreator rdfCreator = new RdfCreator();
 				rdfCreator.createRDF(geoArray);
 				searchterms.add(term);
+				db.sysoDB();
 			}
 
 			updateResultList(db.getModelInfoFromLocation(term));

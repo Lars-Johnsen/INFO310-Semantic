@@ -74,13 +74,9 @@ public class View extends JFrame {
 	private JLabel venueArea = new JLabel(stringForTest);
 	private JPanel venuePanel = new JPanel();
 
-	private JLabel BandWebsiteLabel = new JLabel("Bandwebsite: ");
-	private JLabel BandWebsiteArea = new JLabel(stringForTest);
-	private JPanel BandWebsitePanel = new JPanel();
 
-	private JLabel eventWebsiteLabel = new JLabel("Bandwebsite: ");
-	private JLabel eventWebsiteArea = new JLabel(stringForTest);
-	private JPanel eventWebsitePanel = new JPanel();
+
+
 	
 	private JLabel ArtistBioLabel = new JLabel("Bio:");
 	private JTextArea artistBioArea = new JTextArea(stringForTest);
@@ -199,18 +195,10 @@ public class View extends JFrame {
 		venuePanel.add(venueArea);
 		venuePanel.setPreferredSize(detailPanelDimension);
 
-		//Bandwebsite field and presentation
-
-		BandWebsitePanel.add(BandWebsiteLabel);
-		BandWebsitePanel.add(BandWebsiteArea);
-		BandWebsitePanel.setPreferredSize(detailPanelDimension);
 
 		//Bandwebsite field and presentation
 
-		eventWebsitePanel.add(eventWebsiteLabel);
-		eventWebsitePanel.add(eventWebsiteArea);
-		eventWebsitePanel.setPreferredSize(detailPanelDimension);
-		
+	
 		artistBioPanel.add(ArtistBioLabel);
 		artistBioPanel.setLayout(new BorderLayout(5,5));
 		artistBioArea.setEditable(false);
@@ -257,7 +245,6 @@ public class View extends JFrame {
 		detailsPanel.add(headlinerpanel);
 		detailsPanel.add(datePanel);
 		detailsPanel.add(venuePanel);
-		detailsPanel.add(BandWebsitePanel);
 		detailsPanel.add(artistBioPanel);
 	
 
@@ -495,53 +482,8 @@ public class View extends JFrame {
 		this.venuePanel = venuePanel;
 	}
 
-	public JLabel getBandWebsiteLabel() {
-		return BandWebsiteLabel;
-	}
 
-	public void setBandWebsiteLabel(JLabel bandWebsiteLabel) {
-		BandWebsiteLabel = bandWebsiteLabel;
-	}
 
-	public JLabel getBandWebsiteArea() {
-		return BandWebsiteArea;
-	}
-
-	public void setBandWebsiteArea(JLabel bandWebsiteArea) {
-		BandWebsiteArea = bandWebsiteArea;
-	}
-
-	public JPanel getBandWebsitePanel() {
-		return BandWebsitePanel;
-	}
-
-	public void setBandWebsitePanel(JPanel bandWebsitePanel) {
-		BandWebsitePanel = bandWebsitePanel;
-	}
-
-	public JLabel getEventWebsiteLabel() {
-		return eventWebsiteLabel;
-	}
-
-	public void setEventWebsiteLabel(JLabel eventWebsiteLabel) {
-		this.eventWebsiteLabel = eventWebsiteLabel;
-	}
-
-	public JLabel getEventWebsiteArea() {
-		return eventWebsiteArea;
-	}
-
-	public void setEventWebsiteArea(JLabel eventWebsiteArea) {
-		this.eventWebsiteArea = eventWebsiteArea;
-	}
-
-	public JPanel getEventWebsitePanel() {
-		return eventWebsitePanel;
-	}
-
-	public void setEventWebsitePanel(JPanel eventWebsitePanel) {
-		this.eventWebsitePanel = eventWebsitePanel;
-	}
 
 	public JPanel getCenterPanel() {
 		return westPanel;

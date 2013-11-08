@@ -127,6 +127,6 @@ public class GeoEvent {
 
 
 	public String toString(){
-		return eventName + " with " + headliner + "@" + getVenue();
+		return eventName + " @" + getVenue().getName() + "(" + date + ")"  ;
 	}
 }

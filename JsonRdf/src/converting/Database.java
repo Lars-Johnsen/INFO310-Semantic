@@ -195,7 +195,7 @@ public class Database {
 						solution.get("street").toString(),
 						solution.get("postalcode").toString(),
 						solution.get("venueURL").toString(),
-						solution.get("event").toString(),
+						solution.get("event").asResource().getURI(),
 						solution.get("eventwebsite").toString(),
 						solution.get("phonenumber").toString(), 
 						getGenreArtist(solution.get("artistName").toString()), 
@@ -205,6 +205,7 @@ public class Database {
 						solution.getResource("artist").getURI()
 						);
 				liste.add(geoEvent);
+				System.out.println("Dette er websiden: " + geoEvent.getEventWebsite());
 
 
 
@@ -364,7 +365,6 @@ public class Database {
 
 				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
 				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
-				System.out.println("ARTISTNAVN: " + solution.get("artistName").toString());
 				//PUTT INN I GEOEVENT!
 				geoEvent = new GeoEvent(solution.get("eventName").toString(), 
 						solution.get("eventID").toString(),
@@ -379,7 +379,7 @@ public class Database {
 						solution.get("street").toString(),
 						solution.get("postalcode").toString(),
 						solution.get("venueURL").toString(),
-						solution.get("event").toString(),
+						solution.get("event").asResource().getURI(),
 						solution.get("eventwebsite").toString(),
 						solution.get("phonenumber").toString(),						
 						getGenreArtist(solution.get("artistName").toString()), 

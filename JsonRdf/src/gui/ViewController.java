@@ -114,9 +114,8 @@ public class ViewController implements ActionListener, MouseListener{
 		view.getHeadlinerArea().setText(geo.getHeadliner());
 		view.getDateArea().setText(geo.getDate());
 		view.getVenueArea().setText(geo.getVenue().getName());
-		view.getBandWebsiteArea().setText(geo.getEventWebsite());
-		System.out.println(geo.getArtist().getName());
-		System.out.println(geo.getArtist().getBio());
+	
+		
 		view.getArtistBioArea().setText(geo.getArtist().getBio());
 		view.getImagePanel().removeAll();
 		view.getDetailsPanel().setVisible(true);
@@ -184,7 +183,6 @@ public class ViewController implements ActionListener, MouseListener{
 		JList list = view.getResultList();
 		if (e.getClickCount() == 2) {
 			int index = list.locationToIndex(e.getPoint());
-			System.out.println(index);
 			GeoEvent clickedEvent = (GeoEvent) view.getResults().get(index);
 			view.getUserResponseButtonPanel().setVisible(true);
 			placeGeoElementOnScreen(clickedEvent);

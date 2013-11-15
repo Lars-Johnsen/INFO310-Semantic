@@ -5,8 +5,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
+import javax.swing.JLabel;
 import javax.swing.JList;
 
 import lastfmapi.lastfm.Geo;
@@ -23,39 +26,23 @@ import converting.RdfCreator;
 public class ViewController implements ActionListener, MouseListener{
 	private View view;
 	private ArrayList<String>searchterms = new ArrayList<String>();
+	private int indexForList = 0;
+	private ArrayList<String> recomendationType = new ArrayList<String>();
+	private ArrayList<GeoEvent>eventList = new ArrayList<GeoEvent>();
 	public ViewController(View view){
 		this.view = view;
 
 		view.getResultList().addMouseListener(this);
 
-		//		updateResultList();
 	}
 
 	public void updateResultList(ArrayList<GeoEvent> result){
 		view.getResults().clear();
-		//IMAGE
-		//		MapDisplayer mapDisplayer= new MapDisplayer(); 
-		//		RenderedImage img = mapDisplayer.generateMap(result);
-
-
-		//IMAGE
+	
 		for(GeoEvent geo : result){
-
-			//			System.out.println(geo.getEventName());
 			view.getResults().addElement(geo);
 		}
-		//		BufferedImage myPicture = null;
-		//		try {
-		//			myPicture = ImageIO.read(new File("img/map.png"));
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-		//		JLabel imageLabel = new JLabel(new ImageIcon(myPicture));
-
-		//		view.setMapShower(imageLabel);
-
-		//		view.getImagePanel().add(imageLabel);
+		
 		view.repaint();	
 		view.validate();
 	}
@@ -134,31 +121,80 @@ public class ViewController implements ActionListener, MouseListener{
 
 		}
 		else if(e.getActionCommand().equals("recommend")){
-		
-			Database db = Database.getInstance();
-			LinkedHashSet<String>eventListNames = new LinkedHashSet<String>();
-			ArrayList<GeoEvent>eventList = new ArrayList<GeoEvent>();
-
-
-			eventListNames.addAll(db.sameArtistyouAttendedPlaysOnADifferentEvent());
-			eventListNames.addAll(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
-			eventListNames.addAll(db.getEventsBasedOnAttendedArtistsGenre());
-
-			//			eventListNames.addAll(db.getEventsAttended());
-			System.out.println("HIT: Samme artist har en konsert et annet sted");
-			System.out.println(db.sameArtistyouAttendedPlaysOnADifferentEvent());
-			System.out.println("HIT: En similar artist av en artist du attender har konsert");
-			System.out.println(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
-			System.out.println("HIT: En annen artist med lik genre har konsert");
-			System.out.println(db.getEventsBasedOnAttendedArtistsGenre());
-
-			for(String string : eventListNames){
-				eventList.add(db.getModelInfoFromEvent(string));
-			}
-			updateResultList(eventList);
-
+			
+			
+			updateRecomendations();
 
 		}
+		else if(e.getActionCommand().equals("getRecArtist")){
+			placeGeoElementOnScreen(eventList.get(indexForList));
+	}
+	
+	}
+	public void updateRecomendations() {
+		eventList.clear();
+		recomendationType.clear();
+		
+		Database db = Database.getInstance();
+		LinkedHashSet<String>eventListNamesForSameArtist = new LinkedHashSet<String>();
+		LinkedHashSet<String>eventListNamesForSimilarArtist = new LinkedHashSet<String>();
+		LinkedHashSet<String>eventListNamesForSameGenre = new LinkedHashSet<String>();
+		
+		
+		
+		
+		eventListNamesForSameArtist.addAll(db.sameArtistyouAttendedPlaysOnADifferentEvent());
+		eventListNamesForSimilarArtist.addAll(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
+		eventListNamesForSameGenre.addAll(db.getEventsBasedOnAttendedArtistsGenre());
+		
+		
+	
+		//			eventListNames.addAll(db.getEventsAttended());
+		System.out.println("HIT: Samme artist har en konsert et annet sted");
+		System.out.println(db.sameArtistyouAttendedPlaysOnADifferentEvent());
+		System.out.println("HIT: En similar artist av en artist du attender har konsert");
+		System.out.println(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
+		System.out.println("HIT: En annen artist med lik genre har konsert");
+		System.out.println(db.getEventsBasedOnAttendedArtistsGenre());
+//
+		for(String string : eventListNamesForSameArtist){
+			eventList.add(db.getModelInfoFromEvent(string));
+			recomendationType.add("We have recommended this because you have attended a concert from the same artist artist plays another concert");
+		}
+		for(String string : eventListNamesForSimilarArtist){
+			eventList.add(db.getModelInfoFromEvent(string));
+			recomendationType.add("We have recommended this because a similar artist plays nearby");
+		}
+		for(String string : eventListNamesForSameGenre){
+			eventList.add(db.getModelInfoFromEvent(string));
+			recomendationType.add("We have Recommended this because another artist of the same genre plays");
+		}
+		placeRecommendedEvent(eventList, recomendationType);
+		
+		
+		
+	}
+	public void placeRecommendedEvent(ArrayList<GeoEvent> eventList, ArrayList<String> recomendationType){
+//		ArrayList<GeoEvent> recommendedList = new ArrayList<GeoEvent>();
+		
+		String reason = "";	
+		
+		indexForList += 1;
+		
+		view.getRecomendArtist().setText(eventList.get(indexForList).getEventName());
+		
+		
+		reason = recomendationType.get(indexForList);
+		
+		
+			
+			view.getReasonLabel().setText(reason);
+			view.getReasonLabel().repaint();
+			view.getRecomendArtist().setVisible(true);
+			view.getRecomendArtist().addActionListener(this);
+			view.getRecomendedLabel().setVisible(true);
+			view.repaint();
+			view.validate();
 	}
 
 	public void attend (String Eventuri){

@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -74,10 +75,36 @@ public class View extends JFrame {
 	private JLabel venueArea = new JLabel(stringForTest);
 	private JPanel venuePanel = new JPanel();
 
-
-
-
+	private JLabel recomendedLabel = new JLabel("Recommended for you:");
+	private JLabel reasonLabel = new JLabel();
+	private JLabel RecommendedEvent = new JLabel();
 	
+	private JButton recomendArtist = new JButton();
+	
+	public JButton getRecomendArtist() {
+		return recomendArtist;
+	}
+
+	public void setRecomendArtist(JButton recomendArtist) {
+		this.recomendArtist = recomendArtist;
+	}
+
+	public JLabel getRecommendedEvent() {
+		return RecommendedEvent;
+	}
+
+	public void setRecommendedEvent(JLabel recommendedEvent) {
+		RecommendedEvent = recommendedEvent;
+	}
+
+	public JLabel getReasonLabel() {
+		return reasonLabel;
+	}
+
+	public void setReasonLabel(JLabel reasonLabel) {
+		this.reasonLabel = reasonLabel;
+	}
+
 	private JLabel ArtistBioLabel = new JLabel("Bio:");
 	private JTextArea artistBioArea = new JTextArea(stringForTest);
 	private JPanel artistBioPanel = new JPanel();
@@ -117,22 +144,28 @@ public class View extends JFrame {
 		inputText.addActionListener(viewController);
 		inputText.setPreferredSize(new Dimension(100, 20));
 	
-//		mapShower.setPreferredSize(new Dimension(400, 300));
-//		mapShower.setBorder(BorderFactory.createBevelBorder(DEFAULT_CURSOR));
-		
-//		System.out.println(mapShower.getWidth());
-		
-//		mapShower.setBackground(Color.BLACK);
+
 		northPanel.removeAll();
 		northPanel.setLayout(new BorderLayout());
 		northPanel.setPreferredSize(new Dimension(1024, 120));
 		northPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 		
 		
+		southPanel.setLayout(new GridLayout(3,1));
 		
 		southPanel.removeAll();
 		southPanel.setPreferredSize(new Dimension(1024, 120));
 		southPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
+		southPanel.add(recomendedLabel);
+		southPanel.add(recomendArtist);
+		southPanel.add(reasonLabel);
+		recomendArtist.setBorderPainted(false);
+		recomendArtist.setVisible(false);
+		recomendArtist.setActionCommand("getRecArtist");
+//		recomendedLabel.setVisible(false);
+		
+		
+		
 
 		eastPanel.removeAll();
 		eastPanel.setPreferredSize(new Dimension(512,384));
@@ -279,6 +312,22 @@ public class View extends JFrame {
 		this.setVisible(true);
 		this.pack();
 		this.setBounds(0, 0, 1024, 768);
+	}
+
+	public JButton getRecommend() {
+		return recommend;
+	}
+
+	public void setRecommend(JButton recommend) {
+		this.recommend = recommend;
+	}
+
+	public JLabel getRecomendedLabel() {
+		return recomendedLabel;
+	}
+
+	public void setRecomendedLabel(JLabel recomendedLabel) {
+		this.recomendedLabel = recomendedLabel;
 	}
 
 	public JPanel getUserResponseButtonPanel() {

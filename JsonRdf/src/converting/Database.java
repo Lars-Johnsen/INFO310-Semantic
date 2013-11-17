@@ -3,6 +3,9 @@ package converting;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+
+import lastfmapi.util.StringUtilities;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
@@ -157,7 +160,8 @@ public class Database {
 						+ "?artist <http://www.w3.org/2000/01/rdf-schema#label> ?artistName ."	
 						+ "?artist <http://purl.org/ontology/mo/biography> ?bio ."
 
-						+ "}" ;
+						+ "} "
+						+ "ORDER BY ASC(?date)" ;
 
 
 
@@ -547,5 +551,57 @@ public class Database {
 			queryexec.close() ; 
 		}
 		return eventsAttended;
+	}
+	public void deleteEvent(String eventuri){
+		Model model = getModel();
+		String queryString = 
+						"DELETE  { "
+						+ "?event ?prop ?val }" 
+						+ "WHERE { "
+						+ "?event <http://xmlns.com/foaf/0.1/homepage> \"" + eventuri + "\" ."
+						+ "?event ?prop ?val"
+						+ "}" ;
+
+		System.out.println(queryString);
+		UpdateRequest query = UpdateFactory.create(queryString) ;
+		UpdateAction.execute(query, model);
+		dataset.close();
+
+	}
+	public void deleteEventsOutofDate(){
+		ArrayList <String> eventsToDelete = new ArrayList<String>();
+		Model model = getModel();
+		String queryString = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "
+				+"SELECT ?event ?date" 
+				+ "	WHERE { "
+				+ "?event <http://purl.org/dc/terms/date> ?date ." 
+				+ " FILTER NOT EXISTS {<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?event}  "
+				+ "}" ;
+
+
+		Query query = QueryFactory.create(queryString) ;
+		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
+		System.out.println(queryString);
+		Date atm = new Date();
+		try {
+			ResultSet results = queryexec.execSelect() ;
+
+			while ( results.hasNext() ){
+				System.out.println("SVAR");
+				QuerySolution solution = results.nextSolution() ;
+				if(StringUtilities.getDateFromString(solution.get("?date").toString()).before(atm)){
+					System.out.println("SDASD");
+					System.out.println(solution.getResource("?event").getURI());
+					eventsToDelete.add(solution.getResource("?event").getURI());
+				}
+
+			}
+			for(String eventuri : eventsToDelete){
+				deleteEvent(eventuri);
+			}
+		} finally { 
+			queryexec.close() ; 
+		}
+
 	}
 }

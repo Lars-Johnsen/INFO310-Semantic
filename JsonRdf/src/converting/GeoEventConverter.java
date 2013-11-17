@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 import lastfmapi.lastfm.Artist;
 import lastfmapi.lastfm.Result;
+import lastfmapi.util.StringUtilities;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 
 public class GeoEventConverter {

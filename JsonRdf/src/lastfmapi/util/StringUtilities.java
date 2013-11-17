@@ -30,9 +30,20 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
+
+import javax.xml.bind.DatatypeConverter;
+
+import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 
 /**
  * Utilitiy class with methods to calculate an md5 hash and to encode URLs.
@@ -203,7 +214,7 @@ public final class StringUtilities {
 			String resten = word.substring(1, word.length());
 			String termen = forbokstav + resten;
 			if(x>0){
-				
+
 				term += " " + termen;
 			}
 			else{
@@ -213,4 +224,26 @@ public final class StringUtilities {
 		}  
 		return term;
 	}
+	public static Date getDateFromString(String string){
+		Date date = new Date();
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
+			date = formatter.parse(string);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+
+		
+		return date;
+	}
+
+
+//	public static String presentXSDDateTime(String string){
+//
+//		String s = string.substring(8, 10) + "." + string.substring(5, 7) + "." 
+//		+ string.substring(0, 4) +", klokken: " + string.substring(11, 16);
+//		return s;
+//	}
 }

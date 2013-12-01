@@ -35,7 +35,10 @@ public class ViewController implements ActionListener, MouseListener{
 		view.getResultList().addMouseListener(this);
 
 	}
-
+	/**
+	 * Method for updating the resultlist with the relevant concerts.
+	 * @param result
+	 */
 	public void updateResultList(ArrayList<GeoEvent> result){
 		view.getResults().clear();
 	
@@ -46,7 +49,11 @@ public class ViewController implements ActionListener, MouseListener{
 		view.repaint();	
 		view.validate();
 	}
-
+	/**
+	 * Method for searching after concert.
+	 * WIll first search through the local database before making a call to the last.fm API.
+	 * @param term
+	 */
 	public void search(String term){
 		Database db = Database.getInstance();
 
@@ -107,7 +114,9 @@ public class ViewController implements ActionListener, MouseListener{
 		view.getImagePanel().removeAll();
 		view.getDetailsPanel().setVisible(true);
 	}
-
+	/**
+	 * Action Performed Method.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -131,6 +140,9 @@ public class ViewController implements ActionListener, MouseListener{
 	}
 	
 	}
+	/**
+	 * Method for updating the recommendationlist.
+	 */
 	public void updateRecomendations() {
 		eventList.clear();
 		recomendationType.clear();
@@ -174,20 +186,24 @@ public class ViewController implements ActionListener, MouseListener{
 		
 		
 	}
+	/**
+	 * Places the recommende concsert on the screen. 
+	 * @param eventList
+	 * @param recomendationType
+	 */
 	public void placeRecommendedEvent(ArrayList<GeoEvent> eventList, ArrayList<String> recomendationType){
 //		ArrayList<GeoEvent> recommendedList = new ArrayList<GeoEvent>();
 		
 		String reason = "";	
 		
 		indexForList += 1;
-		
+		try{
 		view.getRecomendArtist().setText(eventList.get(indexForList).getEventName());
-		
-		
 		reason = recomendationType.get(indexForList);
+		}
+		catch(IndexOutOfBoundsException e){
 		
-		
-			
+		}
 			view.getReasonLabel().setText(reason);
 			view.getReasonLabel().repaint();
 			view.getRecomendArtist().setVisible(true);

@@ -24,7 +24,7 @@ public class RdfCreator {
 	}
 
 	/**
-	 * Generating model from ArrayList
+	 * Method for lifting Java Objects to RDF.
 	 * @param geoArray
 	 * @return model
 	 */

@@ -182,7 +182,7 @@ public class Database {
 				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
 
 				//PUTT INN I GEOEVENT!
-				//Bruker konstruktør2
+				//Bruker konstruktï¿½r2
 
 
 
@@ -209,7 +209,7 @@ public class Database {
 						solution.getResource("artist").getURI()
 						);
 				liste.add(geoEvent);
-				System.out.println("Dette er websiden: " + geoEvent.getEventWebsite());
+
 
 
 
@@ -319,7 +319,7 @@ public class Database {
 		return result;
 	}
 	public GeoEvent getModelInfoFromEvent(String eventuri){
-		//IKKE OK, skal være som getModelInfoFromLocation, men heller benytte eventets URI.
+		//IKKE OK, skal vï¿½re som getModelInfoFromLocation, men heller benytte eventets URI.
 		Model model = getModel();
 		GeoEvent geoEvent = null;
 		String queryString = 	
@@ -417,7 +417,7 @@ public class Database {
 	 * @param eventURI
 	 */
 	public void attend(String eventURI){
-		System.out.println("ATTEND");
+
 		Model model = getModel();
 		String eventResource = "<" + eventURI +">";
 		String queryString = 
@@ -562,7 +562,7 @@ public class Database {
 						+ "?event ?prop ?val"
 						+ "}" ;
 
-		System.out.println(queryString);
+
 		UpdateRequest query = UpdateFactory.create(queryString) ;
 		UpdateAction.execute(query, model);
 		dataset.close();
@@ -581,17 +581,14 @@ public class Database {
 
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
-		System.out.println(queryString);
+		
 		Date atm = new Date();
 		try {
 			ResultSet results = queryexec.execSelect() ;
 
 			while ( results.hasNext() ){
-				System.out.println("SVAR");
 				QuerySolution solution = results.nextSolution() ;
 				if(StringUtilities.getDateFromString(solution.get("?date").toString()).before(atm)){
-					System.out.println("SDASD");
-					System.out.println(solution.getResource("?event").getURI());
 					eventsToDelete.add(solution.getResource("?event").getURI());
 				}
 

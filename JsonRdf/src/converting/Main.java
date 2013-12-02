@@ -28,7 +28,6 @@ public class Main {
 		// TODO Auto-generated method stub
 		Database db = Database.getInstance();
 		db.deleteEventsOutofDate();
-		db.sysoDB();
 
 		View view = new View();
 		

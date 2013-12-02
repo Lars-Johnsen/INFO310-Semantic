@@ -110,11 +110,11 @@ public class GeoEventConverter {
 					e.printStackTrace();
 					date = "010101";
 				}
-				System.out.println("FØR HEADLINER2");
+				
 				Result jsonArtist = Artist.getInfo(Headliner, "64ecb66631fd1570172e9c44108b96d4");
-				System.out.println("HEADLINER2: " + Headliner);
+			
 				if(!jsonArtist.isSuccessful()){
-					System.out.println("INGEN ARTIST");
+					
 				}
 				else{
 					
@@ -123,14 +123,13 @@ public class GeoEventConverter {
 					events.add(geoEvent);
 				}
 			}
-			System.out.println("ALLE SOM GÅR I BASEN");
-			for(GeoEvent geo : events){
-				System.out.println(geo.getHeadliner());
-			}
+			
 
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			return null;
+//			e.printStackTrace();
+//			System.out.println("LOL");
 		}
 
 		return events;

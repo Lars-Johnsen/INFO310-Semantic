@@ -74,7 +74,7 @@ public class RdfCreator {
 				event.addProperty(model.createProperty("http://purl.org/ontology/mo/performer"), artistResource);
 			}
 			else{
-				System.out.println("N����������������������������");
+			
 				event.addProperty(model.createProperty("http://purl.org/ontology/mo/performer"), model.getResource(artistRessurs));	
 			}
 			if(!geoEvent.getEventWebsite().isEmpty()){

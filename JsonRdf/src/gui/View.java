@@ -51,7 +51,7 @@ public class View extends JFrame {
 	private JButton					recommend = new JButton("recommend");
 	private JPanel			UserResponseButtonPanel = new JPanel();
 
-	private String stringForTest = "DETTE ER EN TEST STRENG OG SKAL";
+	private String stringForTest = "";
 	/**
 	 * Creating fields for GUI elements
 	 */
@@ -187,7 +187,7 @@ public class View extends JFrame {
 
 
 
-		JLabel inputTextLabel = new JLabel("Search for Concert or Artist:");
+		JLabel inputTextLabel = new JLabel("Search for Concert:");
 		JPanel inputArea = new JPanel();
 
 
@@ -195,8 +195,7 @@ public class View extends JFrame {
 		//Code for creating the Eventname area
 
 		Dimension detailPanelDimension = new Dimension(400, 25);
-		Dimension resultListDimension = new Dimension(500, 200);
-
+		
 		inputText.setPreferredSize(detailPanelDimension);
 
 

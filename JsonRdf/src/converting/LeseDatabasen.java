@@ -32,8 +32,6 @@ public class LeseDatabasen extends Object {
         Dataset dataset= TDBFactory.createDataset("rdfbase");
         Model model = dataset.getDefaultModel();                
         
-        model.write(System.out);
-        
         dataset.close();
         
       }

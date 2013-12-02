@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import lastfmapi.lastfm.Geo;
 import lastfmapi.lastfm.Result;
@@ -39,6 +40,7 @@ public class ViewController implements ActionListener, MouseListener{
 	 * Method for updating the resultlist with the relevant concerts.
 	 * @param result
 	 */
+	@SuppressWarnings("unchecked")
 	public void updateResultList(ArrayList<GeoEvent> result){
 		view.getResults().clear();
 	
@@ -58,12 +60,12 @@ public class ViewController implements ActionListener, MouseListener{
 		Database db = Database.getInstance();
 
 		if(term.equals("")){
-			System.out.println("TOM-STRENG");
+			JOptionPane.showMessageDialog(view, "Please Specify a search term");
 		}
 		else{
 			term = StringUtilities.searchCheck(term);
 			if(searchterms.contains(term.toString())){
-				System.out.println("SEARCHTERMS CONTAINS" + " " + term);
+				
 			}
 			else{
 
@@ -79,14 +81,14 @@ public class ViewController implements ActionListener, MouseListener{
 				for(GeoEvent geoEvent : geoArray){
 					if(db.checkEvent(geoEvent.getEventUrl())){
 						geoDuplicates.add(geoEvent);
-						System.out.println("fjerner " + geoEvent.getEventUrl() + " fra lista");
+						
 					}
 				}
 				geoArray.removeAll(geoDuplicates);
 				RdfCreator rdfCreator = new RdfCreator();
 				rdfCreator.createRDF(geoArray);
 				searchterms.add(term);
-				db.sysoDB();
+				
 			}
 
 			updateResultList(db.getModelInfoFromLocation(term));
@@ -122,8 +124,13 @@ public class ViewController implements ActionListener, MouseListener{
 		
 		if(e.getSource().equals(view.getInputText())){
 			view.getResults().clear();
+			try{
 			search(view.getInputText().getText());
-		}
+			}
+			catch(NullPointerException n){
+				JOptionPane.showMessageDialog(view, "No Concerts found");
+			}
+			}
 		else if(e.getActionCommand().equals("attend")){
 			GeoEvent event = (GeoEvent)view.getResultList().getSelectedValue();
 			attend(event.getEventUrl());
@@ -158,17 +165,7 @@ public class ViewController implements ActionListener, MouseListener{
 		eventListNamesForSameArtist.addAll(db.sameArtistyouAttendedPlaysOnADifferentEvent());
 		eventListNamesForSimilarArtist.addAll(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
 		eventListNamesForSameGenre.addAll(db.getEventsBasedOnAttendedArtistsGenre());
-		
-		
 	
-		//			eventListNames.addAll(db.getEventsAttended());
-		System.out.println("HIT: Samme artist har en konsert et annet sted");
-		System.out.println(db.sameArtistyouAttendedPlaysOnADifferentEvent());
-		System.out.println("HIT: En similar artist av en artist du attender har konsert");
-		System.out.println(db.ArtistyouAttendedHaveSimilar_TOWhoPlaysOnADifferentEvent());
-		System.out.println("HIT: En annen artist med lik genre har konsert");
-		System.out.println(db.getEventsBasedOnAttendedArtistsGenre());
-//
 		for(String string : eventListNamesForSameArtist){
 			eventList.add(db.getModelInfoFromEvent(string));
 			recomendationType.add("We have recommended this because you have attended a concert from the same artist artist plays another concert");
@@ -229,9 +226,10 @@ public class ViewController implements ActionListener, MouseListener{
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		@SuppressWarnings("unchecked")
+
 		JList list = view.getResultList();
 		if (e.getClickCount() == 2) {
 			int index = list.locationToIndex(e.getPoint());
@@ -239,7 +237,7 @@ public class ViewController implements ActionListener, MouseListener{
 			view.getUserResponseButtonPanel().setVisible(true);
 			placeGeoElementOnScreen(clickedEvent);
 		} else if (e.getClickCount() == 3) {   // Triple-click
-			int index = list.locationToIndex(e.getPoint());
+			
 
 		}
 	}

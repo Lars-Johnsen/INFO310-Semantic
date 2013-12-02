@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Artist {
 	private String name;
-	private String mbid;
+
 	private ArrayList<String> similarArtists;
 	private ArrayList<String> tags;
 	private String artistURL;
@@ -13,7 +13,7 @@ public class Artist {
 	public Artist(String name, ArrayList<String> similar, ArrayList<String> tags,
 			String artistURL, String bioBeforetransform){
 		this.name = name;
-		this.mbid = mbid;
+
 		this.similarArtists = similar;
 		this.tags = tags;
 		this.artistURL = artistURL;
@@ -39,13 +39,7 @@ public class Artist {
 		this.name = name;
 	}
 
-	public String getMbid() {
-		return mbid;
-	}
 
-	public void setMbid(String mbid) {
-		this.mbid = mbid;
-	}
 
 	public ArrayList<String> getSimilarArtists() {
 		return similarArtists;

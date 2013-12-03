@@ -25,7 +25,7 @@ public class RdfCreator {
 
 	/**
 	 * Method for lifting Java Objects to RDF.
-	 * @param geoArray
+	 * @param geoArray Array of GeoEvents, in Java object format
 	 * @return model
 	 */
 	public Model createRDF(ArrayList<GeoEvent> geoArray){
@@ -100,7 +100,7 @@ public class RdfCreator {
 			event.addProperty(DC.coverage, venue);
 
 		}
-
+		model.write(System.out);
 		return model;
 	}	
 

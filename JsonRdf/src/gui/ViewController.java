@@ -45,6 +45,7 @@ public class ViewController implements ActionListener, MouseListener{
 		view.getResults().clear();
 	
 		for(GeoEvent geo : result){
+		
 			view.getResults().addElement(geo);
 		}
 		
@@ -58,7 +59,7 @@ public class ViewController implements ActionListener, MouseListener{
 	 */
 	public void search(String term){
 		Database db = Database.getInstance();
-
+	
 		if(term.equals("")){
 			JOptionPane.showMessageDialog(view, "Please Specify a search term");
 		}
@@ -92,7 +93,7 @@ public class ViewController implements ActionListener, MouseListener{
 			}
 
 			updateResultList(db.getModelInfoFromLocation(term));
-
+			
 			view.repaint();
 			view.validate();
 			
@@ -184,7 +185,7 @@ public class ViewController implements ActionListener, MouseListener{
 		
 	}
 	/**
-	 * Places the recommende concsert on the screen. 
+	 * Places the recommended concert on the screen. 
 	 * @param eventList
 	 * @param recomendationType
 	 */

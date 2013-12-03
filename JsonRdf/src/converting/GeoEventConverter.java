@@ -23,6 +23,12 @@ public class GeoEventConverter {
 
 
 	}
+	/**
+	 * accesor for GeoEventConverter.
+	 * We only need one instance of this class at a Time.
+	 * 
+	 * @return GeoEventConverter
+	 */
 
 	public static GeoEventConverter getInstance(){
 		if(geoEventConverter == null) {

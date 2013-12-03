@@ -2,6 +2,14 @@ package converting;
 
 import java.util.ArrayList;
 
+/**
+ * Class For representing the artist in Java objevt form
+ * @author lars
+ *
+ */
+
+
+
 public class Artist {
 	private String name;
 

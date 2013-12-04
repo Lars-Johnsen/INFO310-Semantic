@@ -265,7 +265,7 @@ public class ViewController implements ActionListener, MouseListener{
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method sstub
 
 	}
 }

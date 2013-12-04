@@ -1,16 +1,9 @@
 package converting;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.*;
-
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 
 public class MapDisplayer {

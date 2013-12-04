@@ -4,9 +4,7 @@ package converting;
 
 import java.util.ArrayList;
 import java.util.Date;
-
 import lastfmapi.util.StringUtilities;
-
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -15,17 +13,11 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.update.Update;
 import com.hp.hpl.jena.update.UpdateAction;
-import com.hp.hpl.jena.update.UpdateExecutionFactory;
 import com.hp.hpl.jena.update.UpdateFactory;
 import com.hp.hpl.jena.update.UpdateRequest;
-import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.VCARD;
 
 public class Database {
@@ -58,7 +50,26 @@ public class Database {
 
 		dataset.close();
 	}
+	
+	public void deleteOutofDate(){
+		
+		Model model = getModel();
+		String queryString = 
+						"DELETE  { "
+						+ "?event ?prop ?val }" 
+						+ "WHERE { "
+						+ "?event <http://purl.org/dc/terms/date> ?date ." 
+						+ " FILTER( ?date < \"" + StringUtilities.getXSD(new Date())+ "^^xsd:dateTime" + "\")"
+						+ " FILTER NOT EXISTS {<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?event}  "
+						+ "?event ?prop ?val"
+						+ "}" ;
 
+
+		System.out.println(queryString);
+		UpdateRequest query = UpdateFactory.create(queryString) ;
+		UpdateAction.execute(query, model);
+		dataset.close();
+	}
 
 	/**
 	 * Checking if it exists an event in the databse that has the location "place"
@@ -159,9 +170,10 @@ public class Database {
 
 						+ "?artist <http://www.w3.org/2000/01/rdf-schema#label> ?artistName ."	
 						+ "?artist <http://purl.org/ontology/mo/biography> ?bio ."
-
+						+ " FILTER( ?date > \"" + StringUtilities.getXSD(new Date())+ "^^xsd:dateTime" + "\")"
 						+ "} "
-						+ "ORDER BY ASC(?date)" ;
+						
+						+ "ORDER BY ASC (?date)" ;
 
 
 
@@ -172,11 +184,9 @@ public class Database {
 		try {
 			ResultSet results = queryexec.execSelect() ;
 
-
 			while ( results.hasNext() ){
 
 				QuerySolution solution = results.nextSolution() ;
-
 
 				double lat = Double.parseDouble(solution.getLiteral("lat").getString());
 				double longitude = Double.parseDouble(solution.getLiteral("long").getString());
@@ -569,7 +579,6 @@ public class Database {
 
 	}
 	public void deleteEventsOutofDate(){
-		ArrayList <String> eventsToDelete = new ArrayList<String>();
 		Model model = getModel();
 		String queryString = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "
 				+"SELECT ?event ?date" 
@@ -589,13 +598,11 @@ public class Database {
 			while ( results.hasNext() ){
 				QuerySolution solution = results.nextSolution() ;
 				if(StringUtilities.getDateFromString(solution.get("?date").toString()).before(atm)){
-					eventsToDelete.add(solution.getResource("?event").getURI());
+					deleteEvent(solution.getResource("?event").getURI());
 				}
 
 			}
-			for(String eventuri : eventsToDelete){
-				deleteEvent(eventuri);
-			}
+
 		} finally { 
 			queryexec.close() ; 
 		}

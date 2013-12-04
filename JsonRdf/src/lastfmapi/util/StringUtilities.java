@@ -32,18 +32,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.regex.Pattern;
-
-import javax.xml.bind.DatatypeConverter;
-
-import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 
 /**
  * Utilitiy class with methods to calculate an md5 hash and to encode URLs.
@@ -233,17 +226,57 @@ public final class StringUtilities {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
 
-		
+
+
 		return date;
 	}
-
-
-//	public static String presentXSDDateTime(String string){
-//
-//		String s = string.substring(8, 10) + "." + string.substring(5, 7) + "." 
-//		+ string.substring(0, 4) +", klokken: " + string.substring(11, 16);
-//		return s;
+	
+	public static String getXSD(Date date){
+		SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd'T'HH:mm:ss'Z'",Locale.ENGLISH);
+		return ft.format(date);
+	}
+	
+	public static String getStringFromXSD(String xsd){
+		Date date = new Date();
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",Locale.ENGLISH);
+			date = formatter.parse(xsd);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return date.toString();
+	}
+//	public static String getXSDDateTimeFromDate(Date date){
+//		String datetime ="";
+//		
+//		String year = 1900 +date.getYear() +"";
+//		int month = date.getMonth() +1;
+//		String m = addZero(month);
+//		String dat = addZero(date.getDate());
+//		String min = addZero(date.getMinutes());
+//		String hrs = addZero(date.getHours());
+//		String sec = addZero(date.getSeconds());
+//		
+//		
+//		datetime = year +"-" + m +"-" + dat + "T" + hrs + ":" + min + ":" + sec+"Z";
+//		return datetime;
 //	}
+//	public static String addZero(int i){
+//		String string =i+"";
+//		if(i < 10){
+//			string = "0" + i;
+//		}
+//		return string;
+//	}
+
+
+	//	public static String presentXSDDateTime(String string){
+	//
+	//		String s = string.substring(8, 10) + "." + string.substring(5, 7) + "." 
+	//		+ string.substring(0, 4) +", klokken: " + string.substring(11, 16);
+	//		return s;
+	//	}
 }

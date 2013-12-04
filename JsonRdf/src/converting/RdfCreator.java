@@ -100,7 +100,6 @@ public class RdfCreator {
 			event.addProperty(DC.coverage, venue);
 
 		}
-		model.write(System.out);
 		return model;
 	}	
 

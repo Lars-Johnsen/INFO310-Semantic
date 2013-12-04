@@ -2,6 +2,7 @@ package converting;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import lastfmapi.lastfm.Artist;
 import lastfmapi.lastfm.Result;
@@ -11,7 +12,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.hp.hpl.jena.vocabulary.XSD;
 
 
 public class GeoEventConverter {
@@ -111,7 +111,8 @@ public class GeoEventConverter {
 				String date;
 
 				try{
-					date = event.get("startDate").getAsString();
+					Date jdate = StringUtilities.getDateFromString(event.get("startDate").getAsString());
+					date = StringUtilities.getXSD(jdate);
 				} catch (Exception e) {
 					e.printStackTrace();
 					date = "010101";

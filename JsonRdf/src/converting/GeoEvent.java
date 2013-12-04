@@ -2,6 +2,8 @@ package converting;
 
 import java.util.ArrayList;
 
+import lastfmapi.util.StringUtilities;
+
 import com.google.gson.JsonObject;
 
 public class GeoEvent {
@@ -27,13 +29,9 @@ public class GeoEvent {
 		this.bandwebsite = lastFMEventUrl;
 		this.eventWebsite = lastFMEventUrl;	
 	
-		
-		
-		
-		
 		lastfmapi.lastfm.Artist lastFmArtist = new lastfmapi.lastfm.Artist();
 		JsonObject jsonArtist = lastFmArtist.getInfo(headliner, "64ecb66631fd1570172e9c44108b96d4").getJsonObject();
-
+		
 
 		
 		ArtistConverter artistConverter = new ArtistConverter();
@@ -127,6 +125,6 @@ public class GeoEvent {
 
 
 	public String toString(){
-		return eventName + " @" + getVenue().getName() + "(" + date + ")"  ;
+		return eventName + "(" + StringUtilities.getStringFromXSD(date) + ")"  ;
 	}
 }

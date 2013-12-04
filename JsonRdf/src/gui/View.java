@@ -2,24 +2,15 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
-import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,7 +39,8 @@ public class View extends JFrame {
 //	private JLabel 				mapShower = new JLabel();
 	private ViewController 			viewController = new ViewController(this);
 	private JButton					attend = new JButton("attend");
-	private JButton					recommend = new JButton("recommend");
+	private JButton					recommend = new JButton("Show recommended");
+	private JButton					attended = new JButton("Show attended");
 	private JPanel			UserResponseButtonPanel = new JPanel();
 
 	private String stringForTest = "";
@@ -265,6 +257,7 @@ public class View extends JFrame {
 		
 		UserResponseButtonPanel.add(attend);
 		UserResponseButtonPanel.add(recommend);
+		UserResponseButtonPanel.add(attended);
 		
 		northSearchPanel.add(inputArea);
 		westPanel.add(resultList);
@@ -299,7 +292,8 @@ public class View extends JFrame {
 		attend.setActionCommand("attend");
 		recommend.addActionListener(viewController);
 		recommend.setActionCommand("recommend");
-		
+		attended.addActionListener(viewController);
+		attended.setActionCommand("attended");
 
 		getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(northPanel, BorderLayout.NORTH);

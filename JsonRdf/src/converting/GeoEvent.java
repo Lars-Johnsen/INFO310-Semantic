@@ -30,9 +30,9 @@ public class GeoEvent {
 		this.eventWebsite = lastFMEventUrl;	
 	
 		lastfmapi.lastfm.Artist lastFmArtist = new lastfmapi.lastfm.Artist();
+		System.out.println("ARTIST API for " + eventName );
 		JsonObject jsonArtist = lastFmArtist.getInfo(headliner, "64ecb66631fd1570172e9c44108b96d4").getJsonObject();
-		
-
+System.out.println("--------------------------------------");
 		
 		ArtistConverter artistConverter = new ArtistConverter();
 
@@ -54,6 +54,7 @@ public class GeoEvent {
 		this.bandwebsite = lastFMEventUrl;
 		this.eventWebsite = lastFMEventUrl;	
 		this.artist = new Artist(artistName, similar_to, tags, artistURL, bio);
+		System.out.println("FINNES");
 	}
 	
 	

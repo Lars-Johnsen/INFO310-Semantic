@@ -26,7 +26,7 @@ public class Artist {
 		this.tags = tags;
 		this.artistURL = artistURL;
 		
-		this.bio = bioBeforetransform.trim().replaceAll(" +", " ").replaceAll("[\\t\\n\\r]"," ").replaceAll("\\<.*?>", "");;
+		this.bio = bioBeforetransform.trim().replaceAll(" +", " ").replaceAll("[\\t\\n\\r]"," ").replaceAll("\\<.*?>", "").replaceAll("&quot", "");
 		
 		
 	}

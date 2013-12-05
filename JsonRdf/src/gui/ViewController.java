@@ -148,7 +148,7 @@ public class ViewController implements ActionListener, MouseListener{
 	public void updateRecomendations() {
 		eventList.clear();
 		recomendationType.clear();
-
+		view.getResults().clear();
 		Database db = Database.getInstance();
 		LinkedHashSet<String>eventListNamesForSameArtist = new LinkedHashSet<String>();
 		LinkedHashSet<String>eventListNamesForSimilarArtist = new LinkedHashSet<String>();

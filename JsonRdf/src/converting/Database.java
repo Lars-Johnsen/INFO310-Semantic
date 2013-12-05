@@ -546,7 +546,6 @@ public class Database {
 						+ "<http://www.user.no/anderslangseth> <http://data.semanticweb.org/ns/swc/ontology#plansToAttend> ?Attended . "
 						+ "}" ;
 
-
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution queryexec = QueryExecutionFactory.create(query, model) ;
 
